@@ -4,29 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>IWBTGR — Tradução PT-BR by JONATHAN_GABR</title>
-
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
-
     <style>
         @font-face {
             font-family: 'Visitor TT1 BRK';
             src: url('https://raw.githubusercontent.com/JONATHANGABR/iwbtgr-br/main/Fontes/visitor1.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
             font-display: swap;
         }
 
-        * {
+        *, *::before, *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Lato', sans-serif;
-            background: #1a1a2e;
-            color: #eee;
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
         }
 
-        /* Top Bar */
+        body {
+            font-family: 'Lato', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #1a1a2e;
+            color: #eeeeee;
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        /* Top Navigation Bar */
         .top-bar {
             background: #16162a;
             padding: 12px 20px;
@@ -34,184 +43,898 @@
             align-items: center;
             gap: 15px;
             border-bottom: 1px solid #2a2a4a;
+            flex-wrap: wrap;
             position: sticky;
             top: 0;
             z-index: 100;
         }
 
-        .logo {
-            font-family: 'Visitor TT1 BRK', monospace;
+        .top-bar .logo {
+            font-family: 'Visitor TT1 BRK', 'Courier New', monospace;
             font-size: 24px;
             color: #fa5c5c;
             text-decoration: none;
             letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .top-bar nav {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
         }
 
         .top-bar nav a {
             color: #aaa;
             text-decoration: none;
-            margin-right: 12px;
+            font-size: 14px;
+            transition: color 0.2s;
         }
 
         .top-bar nav a:hover {
             color: #fff;
         }
 
-        /* ===== BANNER COM IMAGEM ===== */
+        /* Banner/Header */
         .banner {
             width: 100%;
-            min-height: 180px;
             padding: 40px 20px;
-
-            background-image: url("banner/0.png");
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #2d132c 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-
             position: relative;
             overflow: hidden;
+            min-height: 180px;
         }
 
-        /* overlay escuro */
         .banner::before {
-            content: "";
+            content: '';
             position: absolute;
             inset: 0;
-            background: rgba(0, 0, 0, 0.55);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='50' x='50' text-anchor='middle' font-size='60' fill='%23ffffff' opacity='0.05'%3E🎮%3C/text%3E%3C/svg%3E");
+            background-size: 80px 80px;
+            pointer-events: none;
         }
 
         .banner-content {
-            position: relative;
-            z-index: 1;
             text-align: center;
+            z-index: 1;
+            max-width: 100%;
+            padding: 0 10px;
         }
 
         .banner h1 {
-            font-family: 'Visitor TT1 BRK', monospace;
-            font-size: clamp(22px, 5vw, 48px);
+            font-family: 'Visitor TT1 BRK', 'Courier New', monospace;
+            font-size: clamp(20px, 5vw, 48px);
+            font-weight: normal;
+            color: #ffffff;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
             text-transform: uppercase;
-            color: #fff;
+            word-break: break-word;
         }
 
         .banner h1 span {
             color: #fa5c5c;
         }
 
-        .subtitle {
-            font-family: 'Visitor TT1 BRK', monospace;
-            margin-top: 6px;
+        .banner .subtitle {
+            font-family: 'Visitor TT1 BRK', 'Courier New', monospace;
+            font-size: clamp(12px, 2.5vw, 20px);
             color: #ccc;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
-        /* Layout */
+        /* Main Container */
         .main-container {
             max-width: 1200px;
-            margin: auto;
+            margin: 0 auto;
             display: flex;
-            gap: 24px;
-            padding: 24px;
             flex-wrap: wrap;
+            gap: 24px;
+            padding: 24px 16px;
         }
 
+        /* Sidebar */
         .sidebar {
-            width: 320px;
+            flex: 0 0 320px;
+            max-width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .game-cover {
+            width: 100%;
+            max-width: 320px;
+            aspect-ratio: 1 / 1;
+            background: linear-gradient(135deg, #2d132c 0%, #1a1a2e 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+            position: relative;
+            margin: 0 auto;
+            overflow: hidden;
         }
 
         .game-cover img {
             width: 100%;
+            height: 100%;
+            object-fit: cover;
             border-radius: 8px;
         }
 
-        .download-section,
-        .meta-section,
-        .content-section {
+        .download-section {
             background: #222244;
             border-radius: 8px;
             padding: 20px;
-            margin-bottom: 20px;
+        }
+
+        .download-section h3 {
+            font-size: 12px;
+            color: #888;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
         }
 
         .download-btn {
             display: block;
+            width: 100%;
             background: #fa5c5c;
-            color: #fff;
-            padding: 14px;
+            color: white;
+            padding: 14px 16px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
             text-align: center;
             text-decoration: none;
-            border-radius: 4px;
-            font-weight: bold;
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
         }
 
         .download-btn:hover {
             background: #ff7b7b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(250, 92, 92, 0.3);
         }
 
+        .download-btn:active {
+            transform: translateY(0);
+        }
+
+        .download-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #888;
+            margin-top: 10px;
+        }
+
+        .meta-section {
+            background: #222244;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .meta-section h3 {
+            font-size: 12px;
+            color: #888;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333355;
+            letter-spacing: 1px;
+        }
+
+        .meta-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            font-size: 14px;
+            border-bottom: 1px solid #2a2a4a;
+            gap: 10px;
+        }
+
+        .meta-row:last-child {
+            border-bottom: none;
+        }
+
+        .meta-row .label {
+            color: #888;
+            flex-shrink: 0;
+        }
+
+        .meta-row .value {
+            color: #fff;
+            text-align: right;
+        }
+
+        .meta-row .value a {
+            color: #fa5c5c;
+            text-decoration: none;
+        }
+
+        .meta-row .value a:hover {
+            text-decoration: underline;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag {
+            background: #333355;
+            color: #ccc;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            transition: background 0.2s;
+            cursor: pointer;
+        }
+
+        .tag:hover {
+            background: #444466;
+        }
+
+        /* Rating Badge */
+        .rating-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #333355;
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin-top: 12px;
+        }
+
+        .rating-badge .stars {
+            color: #ffc107;
+            font-size: 14px;
+        }
+
+        .rating-badge .count {
+            color: #888;
+            font-size: 12px;
+        }
+
+        /* Main Content */
         .main-content {
-            flex: 1;
+            flex: 1 1 500px;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
         }
 
+        .content-section {
+            background: #222244;
+            border-radius: 8px;
+            padding: 24px;
+        }
+
+        .content-section h2 {
+            font-size: 20px;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #fa5c5c;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .content-section h2 .emoji {
+            font-size: 22px;
+        }
+
+        .content-section p {
+            color: #ccc;
+            margin-bottom: 12px;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        .content-section p:last-child {
+            margin-bottom: 0;
+        }
+
+        .screenshot-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .screenshot {
+            aspect-ratio: 16 / 9;
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d132c 100%);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .screenshot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+        .screenshot:hover {
+            transform: scale(1.03);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .feature-item {
+            background: #2a2a4a;
+            padding: 14px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: background 0.2s;
+        }
+
+        .feature-item:hover {
+            background: #333366;
+        }
+
+        .feature-item .icon {
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .feature-item .text {
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        .install-steps {
+            counter-reset: step;
+        }
+
+        .install-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 14px;
+            background: #2a2a4a;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+
+        .install-step:last-child {
+            margin-bottom: 0;
+        }
+
+        .install-step::before {
+            counter-increment: step;
+            content: counter(step);
+            background: #fa5c5c;
+            color: white;
+            width: 28px;
+            height: 28px;
+            min-width: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .install-step p {
+            margin: 0;
+            padding-top: 4px;
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        .author-card {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            background: #2a2a4a;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .author-avatar {
+            width: 70px;
+            height: 70px;
+            min-width: 70px;
+            background: linear-gradient(135deg, #fa5c5c 0%, #f093fb 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+
+        .author-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .author-info h3 {
+            font-size: 18px;
+            margin-bottom: 6px;
+            word-break: break-word;
+        }
+
+        .author-info p {
+            color: #aaa;
+            font-size: 14px;
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .author-links {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .author-links a {
+            background: #333366;
+            color: #fa5c5c;
+            padding: 8px 14px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.2s;
+        }
+
+        .author-links a:hover {
+            background: #444477;
+        }
+
+        /* Footer */
         footer {
             background: #16162a;
-            padding: 24px;
+            padding: 24px 16px;
             text-align: center;
-            margin-top: 40px;
+            margin-top: 32px;
+            border-top: 1px solid #2a2a4a;
+        }
+
+        footer p {
             color: #666;
+            font-size: 13px;
+            margin-bottom: 4px;
         }
 
         footer a {
             color: #fa5c5c;
             text-decoration: none;
         }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Modal/Lightbox para imagens */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 8px;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+            animation: zoomIn 0.3s ease;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+            z-index: 1001;
+        }
+
+        .modal-close:hover {
+            color: #fa5c5c;
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .screenshot {
+            cursor: pointer;
+        }
+
+        .screenshot:hover::after {
+            content: '🔍';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 30px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 15px;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        /* Responsive */
+        @media screen and (max-width: 900px) {
+            .main-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                flex: none;
+                width: 100%;
+                max-width: 400px;
+                margin: 0 auto;
+            }
+
+            .game-cover {
+                max-width: 280px;
+                font-size: 80px;
+            }
+        }
+
+        @media screen and (max-width: 600px) {
+            .top-bar {
+                justify-content: center;
+                text-align: center;
+                padding: 10px 15px;
+            }
+
+            .top-bar nav {
+                justify-content: center;
+                width: 100%;
+                gap: 12px;
+            }
+
+            .banner {
+                padding: 30px 15px;
+                min-height: 140px;
+            }
+
+            .main-container {
+                padding: 16px 12px;
+                gap: 16px;
+            }
+
+            .content-section {
+                padding: 16px;
+            }
+
+            .content-section h2 {
+                font-size: 18px;
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .author-card {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .author-links {
+                justify-content: center;
+            }
+
+            .game-cover {
+                font-size: 60px;
+            }
+        }
+
+        @media screen and (max-width: 400px) {
+            html {
+                font-size: 14px;
+            }
+
+            .banner h1 {
+                font-size: 18px;
+            }
+
+            .banner .subtitle {
+                font-size: 11px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .screenshot-gallery {
+                grid-template-columns: 1fr;
+            }
+
+            .top-bar .logo {
+                font-size: 20px;
+            }
+
+            .game-cover {
+                font-size: 50px;
+            }
+        }
     </style>
 </head>
-
 <body>
 
-<header class="top-bar">
-    <a href="#" class="logo">IWBTGR</a>
-    <nav>
-        <a href="#">Início</a>
-        <a href="#sobre">Sobre</a>
-        <a href="#recursos">Recursos</a>
-        <a href="#instalacao">Instalação</a>
-    </nav>
-</header>
+    <!-- Top Navigation -->
+    <header class="top-bar">
+        <a href="#" class="logo">IWBTGR</a>
+        <nav>
+            <a href="#">Início</a>
+            <a href="#sobre">Sobre</a>
+            <a href="#recursos">Recursos</a>
+            <a href="#instalacao">Instalação</a>
+        </nav>
+    </header>
 
-<section class="banner">
-    <div class="banner-content">
-        <h1>Eu quero ser o Cara <span>Remasterizado</span></h1>
-        <p class="subtitle">🇧🇷 Mod de Tradução PT-BR</p>
+    <!-- Banner -->
+    <section class="banner">
+        <div class="banner-content">
+            <h1>Eu quero ser o Cara <span>Remasterizado</span></h1>
+            <p class="subtitle">🇧🇷 Mod de Tradução PT-BR</p>
+        </div>
+    </section>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="game-cover">
+                <img src="https://raw.githubusercontent.com/JONATHANGABR/iwbtgr-br/main/Banner/1.png" alt="IWBTGR PT-BR">
+            </div>
+
+            <div class="download-section">
+                <h3>Download</h3>
+                <a href="#" class="download-btn">⬇ Download Agora</a>
+                <div class="download-info">
+                    <span>Versão 1.0</span>
+                    <span>~15 MB</span>
+                </div>
+                <div class="rating-badge">
+                    <span class="stars">★★★★★</span>
+                    <span class="count">(12 avaliações)</span>
+                </div>
+            </div>
+
+            <div class="meta-section">
+                <h3>Mais Informações</h3>
+                <div class="meta-row">
+                    <span class="label">Status</span>
+                    <span class="value">Completo</span>
+                </div>
+                <div class="meta-row">
+                    <span class="label">Plataforma</span>
+                    <span class="value">Windows</span>
+                </div>
+                <div class="meta-row">
+                    <span class="label">Classificação</span>
+                    <span class="value">Teen</span>
+                </div>
+                <div class="meta-row">
+                    <span class="label">Autor</span>
+                    <span class="value"><a href="#">JONATHAN_GABR</a></span>
+                </div>
+                <div class="meta-row">
+                    <span class="label">Gênero</span>
+                    <span class="value">Platformer</span>
+                </div>
+                <div class="meta-row">
+                    <span class="label">Publicado</span>
+                    <span class="value">2024</span>
+                </div>
+            </div>
+
+            <div class="meta-section">
+                <h3>Tags</h3>
+                <div class="tags">
+                    <span class="tag">Tradução</span>
+                    <span class="tag">PT-BR</span>
+                    <span class="tag">IWBTG</span>
+                    <span class="tag">Fangame</span>
+                    <span class="tag">Difficult</span>
+                    <span class="tag">Platformer</span>
+                    <span class="tag">Retro</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            
+            <!-- About Section -->
+            <section id="sobre" class="content-section">
+                <h2><span class="emoji">📖</span> Sobre o Mod</h2>
+                <p>
+                    Este é um projeto independente de tradução para o <strong>português brasileiro</strong> de 
+                    <strong>I Wanna Be The Guy Remastered (IWBTGR)</strong>. O objetivo é tornar este clássico 
+                    jogo de plataforma acessível para a comunidade brasileira, mantendo a essência e dificuldade 
+                    que tornaram o jogo famoso mundialmente.
+                </p>
+                <p>
+                    IWBTGR é um remake do clássico jogo indie de plataforma conhecido por sua dificuldade extrema 
+                    e referências nostálgicas. Agora você pode experimentar toda essa aventura brutal em seu idioma nativo!
+                </p>
+
+                <div class="screenshot-gallery">
+                    <div class="screenshot" onclick="openModal(this.querySelector('img').src)">
+                        <img src="https://raw.githubusercontent.com/JONATHANGABR/iwbtgr-br/main/Imagens/T.PNG" alt="Screenshot 1">
+                    </div>
+                    <div class="screenshot" onclick="openModal(this.querySelector('img').src)">
+                        <img src="https://raw.githubusercontent.com/JONATHANGABR/iwbtgr-br/main/Imagens/fAALA.PNG" alt="Screenshot 2">
+                    </div>
+                    <div class="screenshot" onclick="openModal(this.querySelector('img').src)">
+                        <img src="https://raw.githubusercontent.com/JONATHANGABR/iwbtgr-br/main/Imagens/iwtg.PNG" alt="Screenshot 3">
+                    </div>
+                    <div class="screenshot" onclick="openModal(this.querySelector('img').src)">
+                        <img src="https://raw.githubusercontent.com/JONATHANGABR/iwbtgr-br/main/Imagens/FAALA2.PNG" alt="Screenshot 4">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Features Section -->
+            <section id="recursos" class="content-section">
+                <h2><span class="emoji">✨</span> Recursos</h2>
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <span class="icon">📝</span>
+                        <span class="text">Tradução completa</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="icon">🎛️</span>
+                        <span class="text">Menus em PT-BR</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="icon">💬</span>
+                        <span class="text">Diálogos traduzidos</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="icon">⚡</span>
+                        <span class="text">Fácil instalação</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="icon">🎮</span>
+                        <span class="text">100% Jogável</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="icon">🔄</span>
+                        <span class="text">Atualizações futuras</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Installation Section -->
+            <section id="instalacao" class="content-section">
+                <h2><span class="emoji">⚙️</span> Como Instalar</h2>
+                <div class="install-steps">
+                    <div class="install-step">
+                        <p>Baixe o arquivo do mod clicando no botão de download</p>
+                    </div>
+                    <div class="install-step">
+                        <p>Extraia o conteúdo do arquivo .zip na pasta do jogo IWBTGR</p>
+                    </div>
+                    <div class="install-step">
+                        <p>Quando solicitado, escolha substituir os arquivos existentes</p>
+                    </div>
+                    <div class="install-step">
+                        <p>Inicie o jogo normalmente e aproveite em Português!</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Author Section -->
+            <section class="content-section">
+                <h2><span class="emoji">👤</span> Sobre o Tradutor</h2>
+                <div class="author-card">
+                    <div class="author-avatar">👨‍💻</div>
+                    <div class="author-info">
+                        <h3>Jonathan Gabriel de Souza Silva</h3>
+                        <p>
+                            Apaixonado por jogos e tradução. Este projeto nasceu do desejo de compartilhar 
+                            com a comunidade brasileira uma das experiências mais desafiadoras e icônicas 
+                            do mundo dos jogos indie.
+                        </p>
+                        <div class="author-links">
+                            <a href="mailto:jonathangabriel08.2013@gmail.com">📧 E-mail</a>
+                            <a href="#">🎮 Mais Projetos</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
     </div>
-</section>
 
-<div class="main-container">
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 <a href="#">JONATHAN_GABR</a> — Projeto de tradução independente e não oficial</p>
+        <p>I Wanna Be The Guy é propriedade de seus respectivos criadores</p>
+        <p style="margin-top: 12px; color: #444;">Inspirado pelo layout do <a href="https://itch.io" target="_blank">itch.io</a></p>
+    </footer>
 
-    <aside class="sidebar">
-        <div class="game-cover">
-            <img src="https://raw.githubusercontent.com/JONATHANGABR/iwbtgr-br/main/Banner/1.png">
-        </div>
+    <!-- Modal para zoom das imagens -->
+    <div class="modal" id="imageModal" onclick="closeModal()">
+        <span class="modal-close" onclick="closeModal()">&times;</span>
+        <img id="modalImage" src="" alt="Imagem ampliada">
+    </div>
 
-        <div class="download-section">
-            <a href="#" class="download-btn">⬇ Download Agora</a>
-        </div>
-    </aside>
+    <script>
+        // Função para abrir o modal com a imagem
+        function openModal(imageSrc) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            modal.classList.add('active');
+            modalImg.src = imageSrc;
+            document.body.style.overflow = 'hidden'; // Bloqueia scroll
+        }
 
-    <main class="main-content">
-        <section id="sobre" class="content-section">
-            <h2>📖 Sobre o Mod</h2>
-            <p>Projeto de tradução PT-BR de I Wanna Be The Guy Remastered.</p>
-        </section>
-    </main>
+        // Função para fechar o modal
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = ''; // Libera scroll
+        }
 
-</div>
-
-<footer>
-    <p>© 2026 <a href="#">JONATHAN_GABR</a></p>
-</footer>
+        // Fechar modal com tecla ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
 
 </body>
 </html>
