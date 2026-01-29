@@ -395,7 +395,7 @@
             font-size: 14px;
         }
 
-        /* Sistema de Doação Pix */
+        /* Sistema de Doação Pix - Sidebar */
         .donation-section {
             background: linear-gradient(135deg, #1a3a2a 0%, #222244 100%);
             border: 1px solid #2a5a3a;
@@ -479,6 +479,23 @@
             color: #666;
         }
 
+        .qr-code-section {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .qr-code-section img {
+            max-width: 180px;
+            border-radius: 8px;
+            border: 3px solid #3a6a4a;
+        }
+
+        .qr-code-section p {
+            color: #7fff7f;
+            font-size: 11px;
+            margin-top: 8px;
+        }
+
         .pix-key-section {
             margin-bottom: 15px;
         }
@@ -552,6 +569,114 @@
             padding-left: 5px;
         }
 
+        /* Modal de Doação */
+        .donation-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .donation-modal.active {
+            display: flex;
+        }
+
+        .donation-modal-content {
+            background: linear-gradient(135deg, #1a3a2a 0%, #222244 100%);
+            border: 2px solid #3a6a4a;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 450px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .donation-modal-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .donation-modal-header h2 {
+            font-size: 24px;
+            color: #7fff7f;
+            margin-bottom: 8px;
+        }
+
+        .donation-modal-header p {
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .donation-modal .qr-code-section img {
+            max-width: 200px;
+        }
+
+        .donation-modal .donation-values {
+            margin-bottom: 20px;
+        }
+
+        .donation-modal .value-btn {
+            padding: 12px 20px;
+            font-size: 16px;
+        }
+
+        .skip-donation {
+            display: block;
+            width: 100%;
+            background: transparent;
+            border: 1px solid #666;
+            color: #888;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.2s;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .skip-donation:hover {
+            border-color: #aaa;
+            color: #aaa;
+        }
+
+        .close-modal-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 30px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close-modal-btn:hover {
+            color: #fff;
+        }
+
         /* Main Content */
         .main-content {
             flex: 1 1 500px;
@@ -622,6 +747,19 @@
         .screenshot:hover {
             transform: scale(1.03);
             box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+        }
+
+        .screenshot:hover::after {
+            content: '🔍';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 30px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 15px;
+            border-radius: 50%;
+            pointer-events: none;
         }
 
         .features-grid {
@@ -836,23 +974,6 @@
             }
         }
 
-        .screenshot {
-            cursor: pointer;
-        }
-
-        .screenshot:hover::after {
-            content: '🔍';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 30px;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 10px 15px;
-            border-radius: 50%;
-            pointer-events: none;
-        }
-
         /* Responsive */
         @media screen and (max-width: 900px) {
             .main-container {
@@ -922,6 +1043,14 @@
             .game-cover {
                 font-size: 60px;
             }
+
+            .donation-modal-content {
+                padding: 20px;
+            }
+
+            .donation-values {
+                flex-wrap: wrap;
+            }
         }
 
         @media screen and (max-width: 400px) {
@@ -987,7 +1116,7 @@
 
             <div class="download-section">
                 <h3>Download</h3>
-                <a href="download/index.html" class="download-btn">⬇ Selecione o Download</a>
+                <button class="download-btn" onclick="openDonationModal()">⬇ Selecione o Download</button>
                 <div class="download-info">
                     <span>Versão 1.5.3.4</span>
                     <span>~53 MB</span>
@@ -1069,15 +1198,20 @@
                 </div>
             </div>
 
-            <!-- Sistema de Doação Pix -->
+            <!-- Sistema de Doação Pix - Sidebar -->
             <div class="meta-section donation-section">
                 <h3>💚 Apoiar com Pix</h3>
                 <p class="donation-desc">Gostou do projeto? Ajude a manter!</p>
                 
+                <div class="qr-code-section">
+                    <img src="https://raw.githubusercontent.com/JONATHANGABR/iwbtgr-br/main/Imagens/qr_code_next_joy.jpg" alt="QR Code Pix">
+                    <p>Escaneie com o app do banco</p>
+                </div>
+                
                 <div class="donation-values">
-                    <button class="value-btn" data-value="5" onclick="selectValue(5)">R$ 5</button>
-                    <button class="value-btn" data-value="10" onclick="selectValue(10)">R$ 10</button>
-                    <button class="value-btn" data-value="20" onclick="selectValue(20)">R$ 20</button>
+                    <button class="value-btn" onclick="selectValue(5)">R$ 5</button>
+                    <button class="value-btn" onclick="selectValue(10)">R$ 10</button>
+                    <button class="value-btn" onclick="selectValue(20)">R$ 20</button>
                 </div>
                 
                 <div class="custom-value">
@@ -1095,13 +1229,6 @@
                         <button class="copy-btn" onclick="copyPixKey()">📋 Copiar</button>
                     </div>
                     <p class="copy-feedback" id="copyFeedback">✅ Chave copiada!</p>
-                </div>
-                
-                <div class="pix-instructions">
-                    <p>1. Abra o app do seu banco</p>
-                    <p>2. Escolha pagar via Pix</p>
-                    <p>3. Cole a chave copiada</p>
-                    <p>4. Digite o valor e confirme</p>
                 </div>
             </div>
         </aside>
@@ -1225,8 +1352,48 @@
         <img id="modalImage" src="" alt="Imagem ampliada">
     </div>
 
+    <!-- Modal de Doação -->
+    <div class="donation-modal" id="donationModal">
+        <div class="donation-modal-content">
+            <div class="donation-modal-header">
+                <h2>💚 Apoie o Projeto!</h2>
+                <p>Sua doação ajuda a manter o projeto e criar novas traduções</p>
+            </div>
+
+            <div class="qr-code-section">
+                <img src="https://raw.githubusercontent.com/JONATHANGABR/iwbtgr-br/main/Imagens/qr_code_next_joy.jpg" alt="QR Code Pix">
+                <p>Escaneie com o app do banco</p>
+            </div>
+
+            <div class="donation-values">
+                <button class="value-btn" onclick="selectValueModal(5)">R$ 5</button>
+                <button class="value-btn" onclick="selectValueModal(10)">R$ 10</button>
+                <button class="value-btn" onclick="selectValueModal(20)">R$ 20</button>
+            </div>
+
+            <div class="custom-value">
+                <label>Valor personalizado:</label>
+                <div class="custom-input-wrapper">
+                    <span class="currency">R$</span>
+                    <input type="number" id="customValueModal" placeholder="0,00" min="1" step="0.01">
+                </div>
+            </div>
+
+            <div class="pix-key-section">
+                <label>Chave Pix (E-mail):</label>
+                <div class="pix-key-box">
+                    <span>jonathangabriel08.2013@gmail.com</span>
+                    <button class="copy-btn" onclick="copyPixKeyModal()">📋 Copiar</button>
+                </div>
+                <p class="copy-feedback" id="copyFeedbackModal">✅ Chave copiada!</p>
+            </div>
+
+            <a href="download/index.html" class="skip-donation">⏭️ Continuar sem doar</a>
+        </div>
+    </div>
+
     <script>
-        // Função para abrir o modal com a imagem
+        // ========== MODAL DE IMAGENS ==========
         function openModal(imageSrc) {
             const modal = document.getElementById('imageModal');
             const modalImg = document.getElementById('modalImage');
@@ -1235,17 +1402,37 @@
             document.body.style.overflow = 'hidden';
         }
 
-        // Função para fechar o modal
         function closeModal() {
             const modal = document.getElementById('imageModal');
             modal.classList.remove('active');
             document.body.style.overflow = '';
         }
 
-        // Fechar modal com tecla ESC
+        // ========== MODAL DE DOAÇÃO ==========
+        function openDonationModal() {
+            const modal = document.getElementById('donationModal');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDonationModal() {
+            const modal = document.getElementById('donationModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Fechar modal clicando fora
+        document.getElementById('donationModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeDonationModal();
+            }
+        });
+
+        // Fechar modais com tecla ESC
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeModal();
+                closeDonationModal();
             }
         });
 
@@ -1255,30 +1442,23 @@
         
         let selectedRating = 0;
         let currentData = { total: 0, soma: 0, media: 5 };
+        let isSubmitting = false;
 
-        // Verificar se usuário já avaliou
         function hasUserRated() {
             return localStorage.getItem('iwbtgr_rated') === 'true';
         }
 
-        // Marcar que usuário avaliou
         function setUserRated() {
             localStorage.setItem('iwbtgr_rated', 'true');
         }
 
-        // Atualizar exibição das estrelas
         function updateStarsDisplay(rating) {
             const stars = document.querySelectorAll('#ratingDisplay .star');
             stars.forEach((star, index) => {
-                if (index < Math.round(rating)) {
-                    star.classList.add('active');
-                } else {
-                    star.classList.remove('active');
-                }
+                star.classList.toggle('active', index < Math.round(rating));
             });
         }
 
-        // Atualizar informações de avaliação
         function updateRatingInfo(data) {
             const average = data.total > 0 ? (data.soma / data.total).toFixed(1) : '5.0';
             document.getElementById('ratingAverage').textContent = average;
@@ -1286,7 +1466,6 @@
             updateStarsDisplay(parseFloat(average));
         }
 
-        // Carregar avaliações do Gist
         async function loadRatings() {
             try {
                 const response = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
@@ -1307,8 +1486,14 @@
             }
         }
 
-        // Salvar avaliação no Gist
         async function saveRating(rating) {
+            if (isSubmitting) return false;
+            isSubmitting = true;
+
+            const submitBtn = document.getElementById('submitRating');
+            submitBtn.textContent = 'Enviando...';
+            submitBtn.disabled = true;
+
             try {
                 currentData.total += 1;
                 currentData.soma += rating;
@@ -1335,21 +1520,26 @@
                     updateRatingInfo(currentData);
                     document.getElementById('ratingInput').style.display = 'none';
                     document.getElementById('ratingThanks').style.display = 'block';
+                    isSubmitting = false;
                     return true;
+                } else {
+                    throw new Error('Erro na resposta');
                 }
             } catch (error) {
                 console.log('Erro ao salvar avaliação:', error);
+                submitBtn.textContent = 'Tentar novamente';
+                submitBtn.disabled = false;
+                submitBtn.classList.add('active');
+                isSubmitting = false;
+                return false;
             }
-            return false;
         }
 
-        // Configurar interação das estrelas
         function setupStarsInput() {
             const stars = document.querySelectorAll('.star-input');
             const submitBtn = document.getElementById('submitRating');
 
             stars.forEach(star => {
-                // Hover effect
                 star.addEventListener('mouseenter', function() {
                     const value = parseInt(this.dataset.value);
                     stars.forEach((s, i) => {
@@ -1357,12 +1547,10 @@
                     });
                 });
 
-                // Mouse leave
                 star.addEventListener('mouseleave', function() {
                     stars.forEach(s => s.classList.remove('hover'));
                 });
 
-                // Click
                 star.addEventListener('click', function() {
                     selectedRating = parseInt(this.dataset.value);
                     stars.forEach((s, i) => {
@@ -1373,17 +1561,66 @@
                 });
             });
 
-            // Submit button
-            submitBtn.addEventListener('click', async function() {
-                if (selectedRating > 0) {
-                    this.textContent = 'Enviando...';
-                    this.disabled = true;
-                    await saveRating(selectedRating);
+            submitBtn.addEventListener('click', function() {
+                if (selectedRating > 0 && !isSubmitting) {
+                    saveRating(selectedRating);
                 }
             });
         }
 
-        // Inicializar sistema de avaliações
+        // ========== SISTEMA DE DOAÇÃO PIX ==========
+        function selectValue(value) {
+            document.querySelectorAll('.sidebar .value-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            event.target.classList.add('selected');
+            document.getElementById('customValue').value = '';
+        }
+
+        function selectValueModal(value) {
+            document.querySelectorAll('.donation-modal .value-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            event.target.classList.add('selected');
+            document.getElementById('customValueModal').value = '';
+        }
+
+        function copyPixKey() {
+            const pixKey = document.getElementById('pixKey').textContent;
+            navigator.clipboard.writeText(pixKey).then(() => {
+                const feedback = document.getElementById('copyFeedback');
+                feedback.classList.add('show');
+                setTimeout(() => feedback.classList.remove('show'), 3000);
+            }).catch(() => {
+                fallbackCopy(pixKey, 'copyFeedback');
+            });
+        }
+
+        function copyPixKeyModal() {
+            const pixKey = 'jonathangabriel08.2013@gmail.com';
+            navigator.clipboard.writeText(pixKey).then(() => {
+                const feedback = document.getElementById('copyFeedbackModal');
+                feedback.classList.add('show');
+                setTimeout(() => feedback.classList.remove('show'), 3000);
+            }).catch(() => {
+                fallbackCopy(pixKey, 'copyFeedbackModal');
+            });
+        }
+
+        function fallbackCopy(text, feedbackId) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            const feedback = document.getElementById(feedbackId);
+            feedback.classList.add('show');
+            setTimeout(() => feedback.classList.remove('show'), 3000);
+        }
+
+        // ========== INICIALIZAÇÃO ==========
         document.addEventListener('DOMContentLoaded', function() {
             loadRatings();
 
@@ -1393,61 +1630,21 @@
             } else {
                 setupStarsInput();
             }
-        });
 
-        // ========== SISTEMA DE DOAÇÃO PIX ==========
-        
-        // Selecionar valor predefinido
-        function selectValue(value) {
-            // Remove seleção anterior
-            document.querySelectorAll('.value-btn').forEach(btn => {
-                btn.classList.remove('selected');
-            });
-            
-            // Adiciona seleção ao botão clicado
-            event.target.classList.add('selected');
-            
-            // Limpa valor personalizado
-            document.getElementById('customValue').value = '';
-        }
-
-        // Copiar chave Pix
-        function copyPixKey() {
-            const pixKey = document.getElementById('pixKey').textContent;
-            
-            // Copia para área de transferência
-            navigator.clipboard.writeText(pixKey).then(() => {
-                // Mostra feedback
-                const feedback = document.getElementById('copyFeedback');
-                feedback.classList.add('show');
-                
-                // Esconde depois de 3 segundos
-                setTimeout(() => {
-                    feedback.classList.remove('show');
-                }, 3000);
-            }).catch(err => {
-                // Fallback para navegadores antigos
-                const textArea = document.createElement('textarea');
-                textArea.value = pixKey;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-                
-                const feedback = document.getElementById('copyFeedback');
-                feedback.classList.add('show');
-                setTimeout(() => {
-                    feedback.classList.remove('show');
-                }, 3000);
-            });
-        }
-
-        // Limpa seleção de valores quando digita valor personalizado
-        document.addEventListener('DOMContentLoaded', function() {
+            // Limpar seleção ao digitar valor personalizado
             const customInput = document.getElementById('customValue');
             if (customInput) {
                 customInput.addEventListener('input', function() {
-                    document.querySelectorAll('.value-btn').forEach(btn => {
+                    document.querySelectorAll('.sidebar .value-btn').forEach(btn => {
+                        btn.classList.remove('selected');
+                    });
+                });
+            }
+
+            const customInputModal = document.getElementById('customValueModal');
+            if (customInputModal) {
+                customInputModal.addEventListener('input', function() {
+                    document.querySelectorAll('.donation-modal .value-btn').forEach(btn => {
                         btn.classList.remove('selected');
                     });
                 });
