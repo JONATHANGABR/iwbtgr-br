@@ -1,311 +1,251 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IWBTGR PT-BR - Download Tradução</title>
+    <title>IWBTGR PT-BR - Tradução Completa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-          @font-face {
-            font-family: 'Visitor TT1 BRK';
+        @font-face {
+            font-family: 'Visitor';
             src: url('https://raw.githubusercontent.com/JONATHANGABR/iwbtgr-br/main/Fontes/visitor1.ttf') format('truetype');
-            font-weight: normal;
-            font-style: normal;
-            font-display: swap;
         }
-
+        
+        :root {
+            --primary-red: #fa5c5c;
+            --primary-hover: #ff7b7b;
+            --dark-bg: #0f0f23;
+            --card-bg: #1a1a2e;
+            --card-border: #333355;
+            --text-primary: #ffffff;
+            --text-secondary: #aaa;
+            --accent-gold: #ffd700;
+        }
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            scroll-behavior: smooth;
+            cursor: crosshair;
         }
-
         body {
-            font-family: 'Visitor TT1 BRK', 'Courier New', monospace;
-            background: #1a1a2e;
-            color: #eeeeee;
+            font-family: 'Visitor', 'Press Start 2P', cursive;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #1a1a2e 100%);
+            color: var(--text-primary);
             min-height: 100vh;
             line-height: 1.6;
+            overflow-x: hidden;
+            opacity: 0; 
+            transition: opacity 0.5s ease;
         }
 
-        /* Header */
+        /* --- Tiro (Bullet Effect) --- */
+        .bullet-impact {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9999;
+            animation: impactAnim 0.3s forwards;
+        }
+        @keyframes impactAnim {
+            0% { transform: translate(-50%, -50%) scale(0.1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; }
+        }
+
+        /* --- Objeto Assassino (Animado com 0.png e 1.png) --- */
+        .killer-object {
+            position: absolute;
+            top: 120px;
+            right: 15%;
+            width: 64px; /* Tamanho ajustado para a cereja */
+            height: 64px;
+            cursor: pointer;
+            z-index: 5;
+            /* Removemos o background-image fixo e o hover shake */
+        }
+
+        /* Estilo das imagens dentro do objeto */
+        .killer-object img {
+            position: absolute;
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%;
+            image-rendering: pixelated;
+            opacity: 0;
+            /* Animação de troca de quadros */
+            animation: cherryAnim 0.5s steps(1) infinite;
+        }
+
+        /* Controla qual imagem aparece em qual momento */
+        .killer-object img:nth-child(1) {
+            animation-delay: 0s;
+        }
+        .killer-object img:nth-child(2) {
+            animation-delay: 0.25s;
+        }
+
+        /* Animação dos quadros (Frame by Frame) */
+        @keyframes cherryAnim {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
+        }
+
+        /* Animação de Queda (Física do Jogo) - Aplica no container pai */
+        .killer-object.falling {
+            top: 110vh !important;
+            transform: rotate(1080deg); 
+            opacity: 0;
+            transition: top 1.2s cubic-bezier(0.55, 0.085, 0.68, 0.53), 
+                        transform 1.2s linear,
+                        opacity 1.2s ease-in;
+            pointer-events: none;
+        }
+
+        /* --- Header --- */
         .header {
-            background: #16162a;
-            padding: 15px 20px;
-            border-bottom: 2px solid #fa5c5c;
+            background: rgba(22, 22, 42, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            border-bottom: 3px solid var(--primary-red);
             position: sticky;
             top: 0;
-            z-index: 100;
-        }
-
-        .header .logo {
-            font-size: 28px;
-            color: #fa5c5c;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-        }
-
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, #0f0f23 0%, #2d132c 100%);
-            padding: 60px 20px;
-            text-align: center;
-            border-bottom: 3px solid #fa5c5c;
-        }
-
-        .hero h1 {
-            font-size: clamp(32px, 8vw, 64px);
-            color: #ffffff;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-        }
-
-        .hero h1 span {
-            color: #fa5c5c;
-        }
-
-        .hero p {
-            font-size: clamp(14px, 3vw, 20px);
-            color: #aaa;
-            margin-bottom: 30px;
-        }
-
-        /* Container */
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        /* Download Cards */
-        .download-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            margin-bottom: 50px;
-        }
-
-        .card {
-            background: #222244;
-            border: 2px solid #333355;
-            border-radius: 12px;
-            padding: 30px;
-            text-align: center;
-            transition: all 0.3s;
-        }
-
-        .card:hover {
-            border-color: #fa5c5c;
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(250, 92, 92, 0.3);
-        }
-
-        .card-icon {
-            font-size: 80px;
-            margin-bottom: 20px;
-            display: block;
-        }
-
-        .card h2 {
-            font-size: 24px;
-            color: #fa5c5c;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-        }
-
-        .card p {
-            font-size: 14px;
-            color: #aaa;
-            margin-bottom: 10px;
-            line-height: 1.8;
-        }
-
-        .card .version {
-            display: inline-block;
-            background: #333355;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 12px;
-            color: #ccc;
-            margin: 10px 0 20px 0;
-        }
-
-        .download-btn {
-            display: inline-block;
-            background: #fa5c5c;
-            color: white;
-            padding: 15px 40px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 18px;
-            text-transform: uppercase;
-            transition: all 0.3s;
-            cursor: pointer;
-            border: none;
-            font-family: 'Visitor TT1 BRK', 'Courier New', monospace;
-        }
-
-        .download-btn:hover {
-            background: #ff7b7b;
-            transform: scale(1.05);
-            box-shadow: 0 5px 20px rgba(250, 92, 92, 0.5);
-        }
-
-        .download-btn.secondary {
-            background: #333366;
-        }
-
-        .download-btn.secondary:hover {
-            background: #444477;
-        }
-
-        /* Info Section */
-        .info-section {
-            background: #222244;
-            border-radius: 12px;
-            padding: 40px;
-            margin-bottom: 40px;
-            border: 2px solid #333355;
-        }
-
-        .info-section h2 {
-            font-size: 28px;
-            color: #fa5c5c;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            border-bottom: 2px solid #fa5c5c;
-            padding-bottom: 10px;
-        }
-
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 25px;
-        }
-
-        .info-item {
-            background: #2a2a4a;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        .info-item .icon {
-            font-size: 40px;
-            margin-bottom: 10px;
-            display: block;
-        }
-
-        .info-item h3 {
-            font-size: 16px;
-            color: #fff;
-            margin-bottom: 8px;
-        }
-
-        .info-item p {
-            font-size: 13px;
-            color: #aaa;
-        }
-
-        /* Steps Section */
-        .steps {
-            background: #222244;
-            border-radius: 12px;
-            padding: 40px;
-            border: 2px solid #333355;
-            margin-bottom: 40px;
-        }
-
-        .steps h2 {
-            font-size: 28px;
-            color: #fa5c5c;
-            margin-bottom: 30px;
-            text-transform: uppercase;
-            border-bottom: 2px solid #fa5c5c;
-            padding-bottom: 10px;
-        }
-
-        .step {
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(250, 92, 92, 0.3);
             display: flex;
-            gap: 20px;
-            margin-bottom: 25px;
-            align-items: flex-start;
-        }
-
-        .step-number {
-            background: #fa5c5c;
-            color: white;
-            width: 50px;
-            height: 50px;
-            min-width: 50px;
-            border-radius: 50%;
-            display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            font-weight: bold;
         }
-
-        .step-content {
-            flex: 1;
-            padding-top: 8px;
+        .header .logo {
+            font-size: clamp(12px, 2vw, 18px);
+            color: var(--primary-red);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: pulse 2s infinite;
         }
+        .nav-menu { display: flex; gap: 25px; list-style: none; }
+        .nav-menu a { color: var(--text-primary); text-decoration: none; font-size: 10px; transition: color 0.3s; text-transform: uppercase; }
+        .nav-menu a:hover { color: var(--primary-red); }
+        .menu-toggle { display: none; background: none; border: none; color: var(--primary-red); font-size: 20px; cursor: pointer; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
 
-        .step-content h3 {
-            font-size: 18px;
-            color: #fff;
-            margin-bottom: 8px;
-        }
-
-        .step-content p {
-            font-size: 14px;
-            color: #aaa;
-            line-height: 1.8;
-        }
-
-        /* Footer */
-        footer {
-            background: #16162a;
-            padding: 30px 20px;
+        /* --- Hero --- */
+        .hero {
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d132c 50%, #1a1a2e 100%);
+            padding: 80px 20px;
             text-align: center;
-            border-top: 2px solid #fa5c5c;
-            margin-top: 50px;
+            border-bottom: 3px solid var(--primary-red);
+            position: relative;
+            overflow: hidden;
         }
-
-        footer p {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 10px;
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at 20% 80%, rgba(250, 92, 92, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255, 215, 0, 0.1) 0%, transparent 50%);
+            animation: float 10s ease-in-out infinite;
         }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        .hero h1 { font-size: clamp(20px, 5vw, 36px); color: var(--text-primary); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 3px; text-shadow: 0 0 20px rgba(250, 92, 92, 0.5); position: relative; z-index: 1; }
+        .hero h1 span { color: var(--primary-red); display: block; margin-top: 10px; font-size: 1.2em; }
+        .hero p { font-size: clamp(10px, 2vw, 14px); color: var(--text-secondary); margin-bottom: 30px; position: relative; z-index: 1; }
 
-        footer a {
-            color: #fa5c5c;
-            text-decoration: none;
-        }
+        /* --- Layout & Cards --- */
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        .section-title { font-size: clamp(16px, 3vw, 24px); color: var(--primary-red); margin-bottom: 40px; text-transform: uppercase; text-align: center; letter-spacing: 2px; position: relative; margin-top: 60px; }
+        .section-title::after { content: ''; display: block; width: 100px; height: 3px; background: linear-gradient(90deg, transparent, var(--primary-red), transparent); margin: 15px auto 0; }
+        
+        .grid-layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 40px; }
+        .card { background: var(--card-bg); border: 2px solid var(--card-border); border-radius: 15px; padding: 40px 30px; text-align: center; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; overflow: hidden; }
+        .card:hover { border-color: var(--primary-red); transform: translateY(-10px); box-shadow: 0 20px 40px rgba(250, 92, 92, 0.3); }
+        .card h2 { font-size: 14px; color: var(--primary-red); margin-bottom: 15px; text-transform: uppercase; }
+        .card p { font-size: 10px; color: var(--text-secondary); margin-bottom: 15px; line-height: 1.8; }
+        
+        /* --- Icons with Fallback --- */
+        .icon-container { height: 60px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; }
+        .icon-img { max-height: 100%; max-width: 100%; image-rendering: pixelated; display: block; }
+        .icon-emoji { font-size: 50px; display: none; }
+        .card-icon-img { max-height: 60px; max-width: 100%; object-fit: contain; image-rendering: auto; display: block; }
+        .version-tag { display: inline-block; background: var(--card-border); padding: 8px 20px; border-radius: 25px; font-size: 10px; color: #ccc; margin: 10px 0 25px 0; border: 1px solid var(--primary-red); }
 
-        footer a:hover {
-            text-decoration: underline;
-        }
+        /* --- Buttons --- */
+        .btn { display: inline-block; background: linear-gradient(135deg, var(--primary-red), var(--primary-hover)); color: white; padding: 15px 40px; border-radius: 10px; text-decoration: none; font-size: 12px; text-transform: uppercase; transition: all 0.3s; cursor: pointer; border: none; font-family: 'Visitor', 'Press Start 2P', cursive; position: relative; overflow: hidden; box-shadow: 0 5px 20px rgba(250, 92, 92, 0.4); }
+        .btn:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 10px 30px rgba(250, 92, 92, 0.6); }
+        .btn.secondary { background: linear-gradient(135deg, #333366, #444477); box-shadow: 0 5px 20px rgba(51, 51, 102, 0.4); }
+        .btn.secondary:hover { box-shadow: 0 10px 30px rgba(51, 51, 102, 0.6); }
 
-        /* Responsive */
+        /* --- Stats Bar --- */
+        .stats-bar { display: flex; justify-content: center; gap: 50px; margin: -30px auto 60px; padding: 30px; background: linear-gradient(135deg, var(--card-bg), #222244); border-radius: 15px; border: 2px solid var(--card-border); max-width: 900px; position: relative; z-index: 10; }
+        .stat-item { text-align: center; }
+        .stat-number { font-size: 20px; color: var(--primary-red); font-weight: bold; margin-bottom: 5px; }
+        .stat-label { font-size: 10px; color: var(--text-secondary); text-transform: uppercase; }
+
+        /* --- Sections CSS --- */
+        .step-container { background: var(--card-bg); border-radius: 15px; padding: 40px; border: 2px solid var(--card-border); }
+        .step { display: flex; gap: 25px; margin-bottom: 30px; align-items: flex-start; padding: 20px; background: rgba(0, 0, 0, 0.2); border-radius: 10px; transition: all 0.3s; }
+        .step:hover { background: rgba(250, 92, 92, 0.1); transform: translateX(10px); }
+        .step-number { background: linear-gradient(135deg, var(--primary-red), var(--primary-hover)); color: white; width: 40px; height: 40px; min-width: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; box-shadow: 0 5px 15px rgba(250, 92, 92, 0.4); }
+        .step-content { flex: 1; padding-top: 5px; }
+        .step-content h3 { font-size: 12px; margin-bottom: 10px; color: #fff; }
+
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .gallery-item { border-radius: 10px; overflow: hidden; border: 2px solid var(--card-border); height: 200px; cursor: pointer; transition: all 0.3s; }
+        .gallery-item:hover { border-color: var(--primary-red); transform: scale(1.03); }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+
+        .faq-item { background: var(--card-bg); margin-bottom: 15px; border: 2px solid var(--card-border); border-radius: 10px; overflow: hidden; transition: all 0.3s; }
+        .faq-item.active { border-color: var(--primary-red); }
+        .faq-header { padding: 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .faq-header h3 { font-size: 12px; margin: 0; }
+        .faq-header span { transition: transform 0.3s; }
+        .faq-item.active .faq-header span { transform: rotate(180deg); }
+        .faq-body { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; background: rgba(0, 0, 0, 0.2); }
+        .faq-content { padding: 20px; font-size: 10px; color: var(--text-secondary); line-height: 1.8; }
+
+        .req-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .req-card { background: #222244; padding: 20px; border-radius: 10px; border-left: 4px solid var(--primary-red); }
+
+        .author-section { background: linear-gradient(135deg, var(--card-bg), #222244); border-radius: 15px; padding: 40px; border: 2px solid var(--card-border); text-align: center; }
+        .author-avatar { width: 100px; height: 100px; border-radius: 50%; background: var(--primary-red); display: flex; align-items: center; justify-content: center; font-size: 40px; margin: 0 auto 20px; box-shadow: 0 10px 30px rgba(250, 92, 92, 0.4); animation: pulse 3s infinite; }
+        .author-avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+        .social-links { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 20px; }
+        .social-link { padding: 10px 20px; border: 1px solid var(--card-border); border-radius: 20px; text-decoration: none; color: var(--text-secondary); font-size: 10px; transition: all 0.3s; cursor: pointer; }
+        .social-link:hover { border-color: var(--primary-red); color: var(--primary-red); transform: translateY(-3px); }
+
+        footer { background: rgba(22, 22, 42, 0.95); padding: 40px 20px; text-align: center; border-top: 3px solid var(--primary-red); margin-top: 60px; font-size: 10px; color: #666; }
+        footer a { color: var(--primary-red); text-decoration: none; cursor: pointer; }
+
+        /* --- Modal --- */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 2000; justify-content: center; align-items: center; backdrop-filter: blur(5px); animation: fadeIn 0.3s; }
+        .modal-content { background: var(--card-bg); border: 2px solid var(--primary-red); padding: 30px; border-radius: 15px; width: 90%; max-width: 500px; text-align: center; position: relative; animation: slideUp 0.3s; }
+        .close-modal { position: absolute; top: 10px; right: 15px; font-size: 24px; color: var(--text-secondary); cursor: pointer; }
+        .close-modal:hover { color: var(--primary-red); }
+
+        /* --- Card Icon Animation (General) --- */
+        .card-icon-anim { position: relative; width: 72px; height: 72px; margin: 0 auto 20px auto; }
+        .card-icon-anim img { position: absolute; top: 0; left: 0; width: 100%; opacity: 0; image-rendering: pixelated; animation: brAnim 0.5s steps(1) infinite; }
+        .card-icon-anim img:nth-child(2) { animation-delay: 0.25s; }
+        @keyframes brAnim { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        /* --- Save Block Scroll Top --- */
+        .scroll-top { position: fixed; bottom: 30px; right: 30px; width: 45px; height: 45px; background-image: url('https://raw.githubusercontent.com/JONATHANGABR/iwbtgr-br/main/Imagens/3.png'); background-size: cover; background-position: center; background-repeat: no-repeat; image-rendering: pixelated; background-color: transparent; border: none; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.3s; z-index: 999; cursor: pointer; filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5)); }
+        .scroll-top:hover { transform: translateY(-5px) scale(1.1); filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.9)); }
+        .scroll-top.visible { opacity: 1; visibility: visible; }
+
         @media (max-width: 768px) {
-            .hero {
-                padding: 40px 15px;
-            }
-
-            .container {
-                padding: 30px 15px;
-            }
-
-            .info-section, .steps {
-                padding: 25px;
-            }
-
-            .download-cards {
-                grid-template-columns: 1fr;
-            }
+            .header { padding: 15px 20px; }
+            .nav-menu { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; width: 100%; background: #16162a; padding: 20px; border-bottom: 2px solid var(--primary-red); text-align: center; }
+            .nav-menu.active { display: flex; }
+            .menu-toggle { display: block; }
+            .stats-bar { flex-direction: column; gap: 20px; margin-top: 0; }
+            .hero { padding: 80px 15px; }
+            .killer-object { top: 90px; right: 5%; width: 48px; height: 48px; }
         }
     </style>
 </head>
@@ -313,110 +253,411 @@
 
     <!-- Header -->
     <header class="header">
-        <div class="logo">Eu quero ser o cara -- IWBTGR Traduzido em PTBR</div>
+        <div class="logo"> IWBTGR PT-BR 🇧🇷</div>
+        <button class="menu-toggle" id="menuToggle">☰</button>
+        <nav>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#about">Sobre</a></li>
+                <li><a href="#downloads">Download</a></li>
+                <li><a href="#requirements">Requisitos</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#author">Autor</a></li>
+            </ul>
+        </nav>
     </header>
 
     <!-- Hero -->
     <section class="hero">
-        <h1>Eu quero ser o Cara <span>Remasterizado</span></h1>
-        <p>🇧🇷 Tradução Completa para Português Brasileiro</p>
+        <!-- OBJECT ASSASSINO ANIMADO (0.png e 1.png) -->
+        <div class="killer-object" id="killerObject" title="Aperta nessa Cereja Deliciosa">
+            <img src="https://raw.githubusercontent.com/JONATHANGABR/iwbtgr-br/main/Imagens/0.png" alt="Cereja Frame 1">
+            <img src="https://raw.githubusercontent.com/JONATHANGABR/iwbtgr-br/main/Imagens/1.png" alt="Cereja Frame 2">
+        </div>
+
+        <h1>Eu Quero Ser o Cara <span>Remasterizado</span></h1>
+        <p>🇧🇷 Tradução Completa para Português Brasileiro | v1.5.3.4</p>
+        <a href="#downloads" class="btn" style="margin-top: 20px;">⬇️ Baixar Agora</a>
     </section>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+        <div class="stat-item">
+            <div class="stat-number">~52 MB</div>
+            <div class="stat-label">Tamanho Total</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">v1.5.3.4</div>
+            <div class="stat-label">Versão Atual</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">100%</div>
+            <div class="stat-label">Tradução</div>
+        </div>
+    </div>
 
     <!-- Main Container -->
     <div class="container">
+        <!-- About Section -->
+        <h2 class="section-title" id="about">🎮 Sobre o Projeto</h2>
+        <div class="grid-layout" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+            
+            <!-- CARD 1 -->
+            <div class="card" style="padding: 20px;">
+                <div class="icon-container" 
+                     style="height: 60px; 
+                            display: flex; 
+                            justify-content: center; 
+                            align-items: center;">
+                    <img src="https://raw.githubusercontent.com/JONATHANGABR/iwbtgr-br/main/Imagens/2.png" 
+                         class="icon-img" 
+                         style="width: 110px; height: 110px; max-width: none; max-height: none; object-fit: contain; position: relative; top: -10px; left: -15px;" 
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <span class="icon-emoji" style="font-size: 70px;">😈</span>
+                </div>
+                <h3>Dificuldade Extrema</h3>
+                <p>O desafio clássico que você ama (ou odeia), agora em PT-BR.</p>
+            </div>
 
-        <!-- Download Cards -->
-        <div class="download-cards">
+            <!-- CARD 2 -->
+            <div class="card" style="padding: 20px;">
+                <div class="icon-container">
+                    <img src="link_do_icone_traducao.png" class="icon-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <span class="icon-emoji">📝</span>
+                </div>
+                <h3>100% Traduzido</h3>
+                <p>Menus, diálogos e interface totalmente adaptados.</p>
+            </div>
+
+            <!-- CARD 3 -->
+            <div class="card" style="padding: 20px;">
+                <div class="icon-container">
+                    <img src="https://cdn.pixabay.com/animation/2025/06/04/04/25/04-25-36-422_256.gif" class="icon-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <span class="icon-emoji">⚡</span>
+                </div>
+                <h3>Instalação Fácil</h3>
+                <p>Basta extrair e jogar. Sem complicações.</p>
+            </div>
+
+            <!-- CARD 4 -->
+            <div class="card" style="padding: 20px;">
+                <div class="icon-container">
+                    <img src="https://art.pixilart.com/eab681f91b795dd.png" class="icon-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <span class="icon-emoji">🖥️</span>
+                </div>
+                <h3>Compatibilidade</h3>
+                <p>Funciona no Windows XP até o Windows 11.</p>
+            </div>
+
+        </div>
+
+        <!-- Downloads Section -->
+        <h2 class="section-title" id="downloads">📥 Área de Downloads</h2>
+        <div class="grid-layout">
+            
             <!-- Mod PT-BR -->
             <div class="card">
-                <span class="card-icon">🇧🇷</span>
-                <h2>Jogo Modificado para PT-BR</h2>
-                <p>Mod de tradução completa em português brasileiro para IWBTGR Feito com todo carinho por Jonathan Gabriel</p>
-                <span class="version">v1.5.3.4</span>
-                <p style="font-size: 12px; color: #888;">~48.14 MB</p>
-                <a href="https://www.mediafire.com/file/fuid7erhbsqtuly/IWBTGR-BR.zip/file" class="download-btn">⬇ Baixar Mod</a>
+                <div class="card-icon-anim">
+                    <img src="https://raw.githubusercontent.com/JONATHANGABR/iwbtgr-br/main/Imagens/0.png" alt="BR Frame 1">
+                    <img src="https://raw.githubusercontent.com/JONATHANGABR/iwbtgr-br/main/Imagens/1.png" alt="BR Frame 2">
+                </div>
+                <h2>Jogo Modificado PT-BR</h2>
+                <p>Tradução completa. Baixe, extraia e jogue!</p>
+                <span class="version-tag">v1.5.3.4 | ~48.14 MB</span>
+                <br>
+                <button class="btn" onclick="openDownloadModal('mod')">⬇️ Baixar Mod</button>
             </div>
 
             <!-- Arquivos do MOD -->
             <div class="card">
-                <span class="card-icon=">https://gm82.cherry-treehouse.com/images/gm82.png</span>
-                <h2>Arquivos GM8.2 do Mod - Precisa do Game Maker 8.2 (Modifique tudo que quiser)</h2>
-                <p>Arquivos Traduzidos do jogo tradução para você que quer Olhar tudo do jogo ou modificar alguma coisa</p>
-                <span class="version">Arquivos da Versão 1.5.3.4</span>
-                <p style="font-size: 12px; color: #888;">~3.30 MB</p>
-                <a href="https://www.mediafire.com/file/35cju1khiqdp2xe/IWBTGR-GM2.zip/file" class="download-btn secondary">⬇ Baixar Arquivos</a>
+                <div class="icon-container" style="height: auto; margin-bottom: 20px;">
+                    <img src="https://gm82.cherry-treehouse.com/images/gm82.png" class="card-icon-img" alt="Arquivos GM8.2 do mod" style="max-height: 60px;">
+                </div>
+                <h2>Arquivos do Mod (GM8.2)</h2>
+                <p>Código fonte para estudo ou modificação.</p>
+                <span class="version-tag">Source | ~3.30 MB</span>
+                <br>
+                <button class="btn secondary" onclick="openDownloadModal('files')">⬇️ Baixar Arquivos</button>
+            </div>
+
+            <!-- Game Maker -->
+            <div class="card">
+                <div class="icon-container" style="height: auto; margin-bottom: 20px;">
+                    <img src="https://gm82.cherry-treehouse.com/images/gm82.png" class="card-icon-img" alt="Game Maker 8.2" style="max-height: 60px;">
+                </div>
+                <h2>Game Maker 8.2</h2>
+                <p>Necessário apenas se for editar os arquivos fonte.</p>
+                <span class="version-tag">Ferramenta</span>
+                <br>
+                <a href="https://gm82.cherry-treehouse.com/#Downloads" target="_blank" class="btn secondary">⬇️ Baixar GM8.2</a>
             </div>
         </div>
 
-        <!-- Info Section -->
-        <section class="info-section">
-            <h2>📋 Sobre a Tradução</h2>
-            <div class="info-grid">
-                <div class="info-item">
-                    <span class="icon">✅</span>
-                    <h3>100% Traduzido</h3>
-                    <p>Menus, diálogos e textos completamente em PT-BR</p>
-                </div>
-                <div class="info-item">
-                    <span class="icon">🖥️</span>
-                    <h3>Windows</h3>
-                    <p>Compatível com Windows XP, 7, 8, 10 e 11</p>
-                </div>
-                <div class="info-item">
-                    <span class="icon">⚡</span>
-                    <h3>Instalação Rápida</h3>
-                    <p>Processo simples em 3 passos</p>
-                </div>
-                <div class="info-item">
-                    <span class="icon">🆓</span>
-                    <h3>Totalmente Grátis</h3>
-                    <p>Projeto feito por fãs, para fãs</p>
-                </div>
-            </div>
-        </section>
-
         <!-- Installation Steps -->
-        <section class="steps">
-            <h2>⚙️ Como Instalar em 2 Passos Simples</h2>
-            
+        <h2 class="section-title">⚙️ Como Instalar</h2>
+        <div class="step-container">
             <div class="step">
                 <div class="step-number">1</div>
                 <div class="step-content">
-                    <h3>Baixe o MOD</h3>
-                    <p>Clique em "Baixar MOD" acima para obter o IWBTG Remasterizado original. Extraia os arquivos em uma pasta de sua preferência.</p>
+                    <h3>Baixe o Arquivo</h3>
+                    <p>Clique em "Baixar Mod" acima para obter o arquivo .zip com o jogo completo.</p>
                 </div>
             </div>
-
             <div class="step">
                 <div class="step-number">2</div>
                 <div class="step-content">
-                    <h3>Desfrute!</h3>
-                    <p>Execute o jogo normalmente. Tudo estará em português brasileiro. Boa sorte com a dificuldade extrema!</p>
+                    <h3>Extraia</h3>
+                    <p>Use o WinRAR ou 7-Zip para extrair o conteúdo em uma pasta de sua preferência.</p>
                 </div>
             </div>
-        </section>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Jogue</h3>
+                    <p>Abra a pasta e execute "IWBTGR-BR.exe". Divirta-se!</p>
+                </div>
+            </div>
+        </div>
 
-        <!-- Author Info -->
-        <section class="info-section">
-            <h2>👨‍💻 Sobre o Projeto</h2>
-            <p style="font-size: 15px; color: #ccc; line-height: 1.8; margin-top: 15px;">
-                Este é um projeto independente de tradução desenvolvido por <strong style="color: #fa5c5c;">Jonathan Gabriel de Souza Silva (JONATHAN_GABR)</strong>. 
-                O objetivo é tornar o jogo de plataforma (IWBTGR) acessível para a comunidade brasileira, mantendo toda a essência e dificuldade brutal que tornaram o jogo famoso.
-            </p>
-            <p style="font-size: 13px; color: #888; margin-top: 20px;">
-                📧 Contato: <a href="mailto:jonathangabriel08.2013@gmail.com">jonathangabriel08.2013@gmail.com</a>
-            </p>
-        </section>
+        <!-- System Requirements -->
+        <h2 class="section-title" id="requirements">💻 Requisitos do Sistema</h2>
+        <div class="req-grid">
+            <div class="req-card">
+                <h3 style="color: var(--primary-red); font-size: 12px; margin-bottom: 10px;">Mínimo</h3>
+                <p style="font-size: 10px; color: #aaa;">
+                    <strong>SO:</strong> Windows XP/7/8/10/11<br>
+                    <strong>CPU:</strong> Pentium 4<br>
+                    <strong>RAM:</strong> 512 MB<br>
+                    <strong>HD:</strong> 100 MB Livre
+                </p>
+            </div>
+            <div class="req-card">
+                <h3 style="color: var(--primary-red); font-size: 12px; margin-bottom: 10px;">Recomendado</h3>
+                <p style="font-size: 10px; color: #aaa;">
+                    <strong>SO:</strong> Windows 10/11<br>
+                    <strong>CPU:</strong> Core 2 Duo ou sup.<br>
+                    <strong>RAM:</strong> 2 GB<br>
+                    <strong>Vídeo:</strong> Compatível com DirectX 9
+                </p>
+            </div>
+        </div>
 
+        <!-- FAQ Section -->
+        <h2 class="section-title" id="faq">❓ Perguntas Frequentes</h2>
+        <div class="faq-container">
+            <div class="faq-item">
+                <div class="faq-header">
+                    <h3>O mod é seguro (tem vírus)?</h3>
+                    <span>▼</span>
+                </div>
+                <div class="faq-body">
+                    <div class="faq-content">
+                        Sim, é 100% seguro. O código é aberto. Apenas Jogos nesse site aqui São legitimos. O mesmo jogo de Outro site pode ser virus.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-header">
+                    <h3>Preciso do jogo original?</h3>
+                    <span>▼</span>
+                </div>
+                <div class="faq-body">
+                    <div class="faq-content">
+                        Não, O download já inclui o jogo completo modificado. É "Stand-alone", basta baixar e jogar.
+                    </div>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-header">
+                    <h3>Meus saves antigos funcionam?</h3>
+                    <span>▼</span>
+                </div>
+                <div class="faq-body">
+                    <div class="faq-content">
+                        Sim, Pois é o Mesmo Jogo, os saves geralmente são compatíveis. Basta copiar o arquivo de save da pasta do jogo original para a pasta do mod.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Author Section -->
+        <h2 class="section-title" id="author">👨‍💻 Sobre o Autor</h2>
+        <section class="author-section">
+            <div class="author-avatar">
+                <img src="https://avatars.githubusercontent.com/u/234505253?s=400&v=4" alt="Jonathan Gabriel">
+            </div>
+            <h3>Jonathan Gabriel (JONATHAN_GABR)</h3>
+            <p style="font-size: 10px; color: #aaa; margin: 15px 0;">
+                Desenvolvedor apaixonado por jogos retro. Criador deste mod de tradução para tornar o IWBTGR acessível a mais brasileiros!
+                <br>Agradecimentos especiais ao Renex pelo suporte técnico no GM8.2.
+            </p>
+            
+            <div class="social-links">
+                <a href="mailto:jonathangabriel08.2013@gmail.com" class="social-link">📧 Email</a>
+                <a href="https://github.com/JONATHANGABR" class="social-link" target="_blank">GitHub</a>
+                <a href="https://www.youtube.com/@jonathangabriel1553" class="social-link" target="_blank">▶️ YouTube</a>
+            </div>
+        </section>
+    </div>
+
+    <!-- Download Confirmation Modal -->
+    <div id="downloadModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeDownloadModal()">&times;</span>
+            <h2 style="color: var(--primary-red); font-size: 14px; margin-bottom: 15px;">⚠️ CONFIRMAÇÃO</h2>
+            <p style="font-size: 10px; color: #ccc; margin-bottom: 20px;" id="modalText">
+                Você está prestes a baixar um arquivo modificado. Certifique-se de ter espaço em disco.
+            </p>
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <a href="#" id="confirmDownloadBtn" class="btn" target="_blank" onclick="handleDownloadClick()">Confirmar Download</a>
+                <button class="btn secondary" onclick="closeDownloadModal()">Cancelar</button>
+            </div>
+        </div>
     </div>
 
     <!-- Footer -->
     <footer>
-        <p>© 2026 <a href="#">JONATHAN_GABR</a> — Projeto de tradução independente e não oficial</p>
-        <p>I Wanna Be The Guy Remastered é propriedade do Grupo Cherry Treehouse Natsu, renex, Floogle, Renko. O Criador do Jogo Original é Michael "Kayin" O'Reilly
-            Agradecimento Especial para Renex, que me explicou varias coisas do GM8.2.</p>
-        <p style="margin-top: 15px; font-size: 12px;">Feito com ❤️ para a comunidade brasileira de IWBTGR</p>
+        <p>© 2026 <a href="#">JONATHAN_GABR</a> — Projeto de tradução independente e não oficial.</p>
+        <p>I Wanna Be The Guy Remastered é propriedade do Grupo Cherry Treehouse (Natsu, renex, Floogle, Renko).</p>
+        <p>O Criador do Jogo Original é Michael "Kayin" O'Reilly.</p>
+        <p style="margin-top: 15px;">Feito com ❤️ para a comunidade brasileira.</p>
     </footer>
 
+    <!-- Scroll Top (Save Block) -->
+    <a class="scroll-top" id="scrollTop"></a>
+
+    <script>
+        // --- LÓGICA DO OBJETO QUE CAI (AGORA COM ANIMAÇÃO INTERNA) ---
+        const obj = document.getElementById('killerObject');
+        obj.addEventListener('click', (e) => {
+            e.stopPropagation(); // Impede o efeito de tiro no objeto
+            obj.classList.add('falling'); // Adiciona classe de queda
+            setTimeout(() => { obj.style.display = 'none'; }, 1200); // Remove após cair
+        });
+
+        // --- INOVAÇÃO: Efeito de Tiro ao Clicar ---
+        document.addEventListener('click', (e) => {
+            const impact = document.createElement('div');
+            impact.classList.add('bullet-impact');
+            impact.style.left = e.pageX + 'px';
+            impact.style.top = e.pageY + 'px';
+            document.body.appendChild(impact);
+            setTimeout(() => { impact.remove(); }, 300);
+        });
+
+        // --- Visibilidade da Aba (Fade Out/In) ---
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                document.body.style.opacity = '0';
+            } else {
+                setTimeout(() => { document.body.style.opacity = '1'; }, 100);
+            }
+        });
+        
+        // --- Loading Inicial ---
+        window.addEventListener('load', () => {
+            setTimeout(() => { document.body.style.opacity = '1'; }, 100);
+        });
+
+        // --- Navigation Logic ---
+        const menuToggle = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navMenu');
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+            });
+        });
+
+        // --- Scroll Animations ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.card, .step, .gallery-item, .author-section').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+
+        // --- FAQ Accordion Logic ---
+        document.querySelectorAll('.faq-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const item = header.parentElement;
+                const body = item.querySelector('.faq-body');
+                
+                document.querySelectorAll('.faq-item').forEach(other => {
+                    if (other !== item) {
+                        other.classList.remove('active');
+                        other.querySelector('.faq-body').style.maxHeight = null;
+                    }
+                });
+                item.classList.toggle('active');
+                if (item.classList.contains('active')) {
+                    body.style.maxHeight = body.scrollHeight + "px";
+                } else {
+                    body.style.maxHeight = null;
+                }
+            });
+        });
+
+        // --- Download Logic ---
+        function handleDownloadClick() {
+            closeDownloadModal();
+            const btn = document.getElementById('confirmDownloadBtn');
+            const originalText = btn.innerText;
+            btn.innerText = "Iniciando...";
+            setTimeout(() => btn.innerText = originalText, 2000);
+        }
+
+        function openDownloadModal(type) {
+            const modal = document.getElementById('downloadModal');
+            const btn = document.getElementById('confirmDownloadBtn');
+            const text = document.getElementById('modalText');
+            if (type === 'mod') {
+                btn.href = 'https://www.mediafire.com/file/fuid7erhbsqtuly/IWBTGR-BR.zip/file';
+                text.innerHTML = 'Você vai baixar o <strong>MOD PT-BR Completo</strong> (~48 MB).<br>Este é um projeto feito por fãs.';
+            } else if (type === 'files') {
+                btn.href = 'https://www.mediafire.com/file/35cju1khiqdp2xe/IWBTGR-GM2.zip/file';
+                text.innerHTML = 'Você vai baixar os <strong>Arquivos do (GM8.2)</strong> (~3 MB).<br>Útil para Modificações.';
+            }
+            modal.style.display = 'flex';
+        }
+
+        function closeDownloadModal() {
+            document.getElementById('downloadModal').style.display = 'none';
+        }
+        window.onclick = function(event) {
+            const modal = document.getElementById('downloadModal');
+            if (event.target == modal) {
+                closeDownloadModal();
+            }
+        }
+
+        // --- Scroll to Top ---
+        const scrollTopBtn = document.getElementById('scrollTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+        scrollTopBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Easter Egg
+        console.log('%c🎮 IWBTGR PT-BR', 'font-size: 20px; color: #fa5c5c; font-weight: bold;');
+        console.log('Traduzido por JONATHAN_GABR');
+    </script>
 </body>
 </html>
