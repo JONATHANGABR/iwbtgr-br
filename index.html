@@ -79,61 +79,150 @@
             color: #fff;
         }
 
-        /* Banner/Header */
+        /* Banner/Header - AJUSTADO */
         .banner {
             width: 100%;
-            padding: 60px 20px;
+            height: 450px;
             background-image: url("https://raw.githubusercontent.com/JONATHANGABR/iwbtgr-br/main/Banner/bann.png");
-            background-size: 100% auto;
-            background-position: center;
+            background-size: cover;
+            background-position: center center;
             background-repeat: no-repeat;
-            background-attachment: scroll;
+            background-attachment: fixed;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
             overflow: hidden;
-            min-height: 300px;
-            height: 40vh;
-            max-height: 400px;
         }
 
+        /* Overlay gradient para melhor contraste */
         .banner::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: rgba(0, 0, 0, 0.5);
+            background: linear-gradient(
+                180deg,
+                rgba(0, 0, 0, 0.3) 0%,
+                rgba(0, 0, 0, 0.5) 50%,
+                rgba(26, 26, 46, 0.8) 100%
+            );
             pointer-events: none;
+        }
+
+        /* Efeito de brilho animado no banner */
+        .banner::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(
+                circle,
+                rgba(250, 92, 92, 0.1) 0%,
+                transparent 70%
+            );
+            animation: bannerGlow 15s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes bannerGlow {
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.5; }
+            50% { transform: translate(-10%, -10%) scale(1.2); opacity: 0.8; }
         }
 
         .banner-content {
             text-align: center;
             z-index: 1;
-            max-width: 100%;
-            padding: 0 10px;
+            max-width: 90%;
+            padding: 40px 20px;
+            background: rgba(26, 26, 46, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid rgba(250, 92, 92, 0.3);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
         }
 
         .banner h1 {
             font-family: 'Visitor TT1 BRK', 'Courier New', monospace;
-            font-size: clamp(20px, 5vw, 48px);
+            font-size: clamp(28px, 6vw, 56px);
             font-weight: normal;
             color: #ffffff;
-            margin-bottom: 8px;
-            letter-spacing: 1px;
+            margin-bottom: 12px;
+            letter-spacing: 2px;
             text-transform: uppercase;
-            word-break: break-word;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            line-height: 1.2;
         }
 
         .banner h1 span {
             color: #fa5c5c;
+            display: inline-block;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .banner .subtitle {
             font-family: 'Visitor TT1 BRK', 'Courier New', monospace;
-            font-size: clamp(12px, 2.5vw, 20px);
-            color: #ccc;
+            font-size: clamp(14px, 3vw, 24px);
+            color: #ddd;
             letter-spacing: 1px;
             text-transform: uppercase;
+            opacity: 0.9;
+        }
+
+        /* Ajustes responsivos do banner */
+        @media screen and (max-width: 1200px) {
+            .banner {
+                height: 400px;
+                background-attachment: scroll;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            .banner {
+                height: 350px;
+                background-size: cover;
+                background-position: center;
+            }
+            
+            .banner-content {
+                padding: 30px 20px;
+                background: rgba(26, 26, 46, 0.9);
+            }
+            
+            .banner h1 {
+                font-size: clamp(24px, 5vw, 40px);
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .banner {
+                height: 300px;
+            }
+            
+            .banner-content {
+                padding: 25px 15px;
+                border-radius: 12px;
+            }
+            
+            .banner h1 {
+                font-size: 22px;
+                letter-spacing: 1px;
+            }
+            
+            .banner .subtitle {
+                font-size: 14px;
+            }
+            
+            /* Remove o efeito de glow em mobile para performance */
+            .banner::after {
+                display: none;
+            }
         }
 
         /* Main Container */
@@ -382,6 +471,16 @@
             background: #333366;
         }
 
+        .feature-item .icon {
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .feature-item .text {
+            font-size: 14px;
+            color: #ccc;
+        }
+
         .install-steps {
             counter-reset: step;
         }
@@ -394,6 +493,10 @@
             background: #2a2a4a;
             border-radius: 6px;
             margin-bottom: 10px;
+        }
+
+        .install-step:last-child {
+            margin-bottom: 0;
         }
 
         .install-step::before {
@@ -432,12 +535,17 @@
             width: 70px;
             height: 70px;
             min-width: 70px;
-            background: linear-gradient(135deg, #fa5c5c 0%, #f093fb 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 32px;
+            overflow: hidden;
+        }
+        
+        .author-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .author-info {
@@ -448,6 +556,7 @@
         .author-info h3 {
             font-size: 18px;
             margin-bottom: 6px;
+            word-break: break-word;
         }
 
         .author-info p {
@@ -455,6 +564,12 @@
             font-size: 14px;
             margin-bottom: 12px;
             line-height: 1.6;
+        }
+
+        .author-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
         }
 
         .author-links a {
@@ -474,7 +589,7 @@
             background: #444477;
         }
 
-        /* Modal Image Zoom */
+        /* Modal/Lightbox para imagens */
         .modal {
             display: none;
             position: fixed;
@@ -584,6 +699,26 @@
             .sidebar { flex: none; width: 100%; max-width: 400px; margin: 0 auto; }
             .game-cover { max-width: 280px; }
         }
+
+        @media screen and (max-width: 600px) {
+            .top-bar { justify-content: center; text-align: center; padding: 10px 15px; }
+            .top-bar nav { justify-content: center; width: 100%; gap: 12px; }
+            .main-container { padding: 16px 12px; gap: 16px; }
+            .content-section { padding: 16px; }
+            .content-section h2 { font-size: 18px; }
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
+            .author-card { flex-direction: column; align-items: center; text-align: center; }
+            .author-links { justify-content: center; }
+            .game-cover { font-size: 60px; }
+        }
+
+        @media screen and (max-width: 400px) {
+            html { font-size: 14px; }
+            .features-grid { grid-template-columns: 1fr; }
+            .screenshot-gallery { grid-template-columns: 1fr; }
+            .top-bar .logo { font-size: 20px; }
+            .game-cover { font-size: 50px; }
+        }
     </style>
 </head>
 <body>
@@ -614,8 +749,7 @@
 
             <div class="download-section scroll-hidden">
                 <h3>Download</h3>
-                <!-- Botão agora rola para a seção de instalação/download -->
-                <a href="download/index.html" class="download-btn">⬇ Ir para a Pagina de Download</a>
+                <a href="download/index.html" class="download-btn">⬇ Ir para a Página de Download</a>
                 <div class="download-info">
                     <span>Versão 1.5.3.4</span>
                     <span>~53 MB</span>
@@ -677,29 +811,34 @@
             </section>
 
             <section id="instalacao" class="content-section scroll-hidden">
-                <h2><span class="emoji">⚙️</span> Download e Instalação</h2>
+                <h2><span class="emoji">⚙️</span> Download e Instalação em 3 Passos Úteis</h2>
                 <div class="install-steps">
                     <div class="install-step">
                         <div style="flex: 1;">
                             <p><strong>Passo 1:</strong> Baixe o arquivo do mod.</p>
-                            
                         </div>
                     </div>
-                    <div class="install-step"><p><strong>Passo 2:</strong> Extraia o conteúdo do arquivo .zip na pasta do jogo IWBTGR.</p></div>
-                    <div class="install-step"><p><strong>Passo 3:</strong> Substitua os arquivos quando solicitado.</p></div>
-                    <div class="install-step"><p><strong>Passo 4:</strong> Inicie o jogo e divirta-se!</p></div>
+                    <div class="install-step"><p><strong>Passo 2:</strong> Extraia para uma pasta o Jogo.</p></div>
+                    <div class="install-step"><p><strong>Passo 3:</strong> Inicie o jogo e divirta-se!</p></div>
                 </div>
             </section>
 
             <section class="content-section scroll-hidden">
-                <h2><span class="emoji">👤</span> Sobre o Tradutor</h2>
+                <h2><span class="emoji">👨‍💻</span> Sobre o Autor</h2>
                 <div class="author-card">
-                    <div class="author-avatar">👨‍💻</div>
+                    <div class="author-avatar">
+                        <img src="https://avatars.githubusercontent.com/u/234505253?s=400&v=4" alt="Jonathan Gabriel">
+                    </div>
                     <div class="author-info">
-                        <h3>Jonathan Gabriel de Souza Silva</h3>
-                        <p>Apaixonado por jogos e tradução. Projeto feito de fã para fã.</p>
+                        <h3>Jonathan Gabriel (JONATHAN_GABR)</h3>
+                        <p>
+                            Modder apaixonado por jogos retro. Criador deste mod de tradução para tornar o IWBTGR acessível a mais brasileiros!
+                            <br>Irei traduzir mais alguns jogos ao decorrer do tempo. Agradeço muito a vocês que vão baixar ou que me apoiaram. Faço na maioria das vezes tutoriais ou gameplay de jogos. 
+                        </p>
                         <div class="author-links">
+                            <a href="https://www.youtube.com/@jonathangabriel1553">Youtube</a>
                             <a href="mailto:jonathangabriel08.2013@gmail.com">📧 E-mail</a>
+                            <a href="https://discord.com/users/1284884231993954392">Discord</a>
                         </div>
                     </div>
                 </div>
@@ -709,7 +848,7 @@
     </div>
 
     <footer>
-        <p>© 2026 JONATHAN_GABR — Projeto independente</p>
+        <p>© 2026 JONATHAN_GABR — MOD de IWBTGR para PT-BR</p>
     </footer>
 
     <!-- Modal Zoom Imagem -->
