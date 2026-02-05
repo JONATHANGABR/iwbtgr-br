@@ -36,7 +36,6 @@
             cursor: crosshair;
         }
 
-        /* Grid de fundo sutil */
         body::before {
             content: '';
             position: fixed;
@@ -59,7 +58,6 @@
             z-index: 1;
         }
 
-        /* Código 404 */
         .error-code {
             font-size: clamp(48px, 12vw, 80px);
             color: var(--accent);
@@ -80,7 +78,6 @@
             background: var(--accent);
         }
 
-        /* Ícone Pixel */
         .icon {
             width: 48px;
             height: 48px;
@@ -98,7 +95,6 @@
             image-rendering: pixelated;
         }
 
-        /* Textos */
         .title {
             font-size: clamp(12px, 3vw, 16px);
             margin-bottom: 16px;
@@ -112,7 +108,6 @@
             margin-bottom: 40px;
         }
 
-        /* Card de Informação */
         .info-card {
             background: var(--bg-card);
             border: 2px solid var(--border);
@@ -140,13 +135,13 @@
 
         .info-value {
             color: var(--text);
+            word-break: break-all;
         }
 
         .info-value.error {
             color: var(--accent);
         }
 
-        /* Botões */
         .btn-group {
             display: flex;
             gap: 12px;
@@ -186,7 +181,6 @@
             color: var(--bg-dark);
         }
 
-        /* Footer */
         .footer {
             margin-top: 48px;
             font-size: 8px;
@@ -202,17 +196,44 @@
             text-decoration: underline;
         }
 
-        /* Cursor blink */
-        .blink {
-            animation: blink 1s step-end infinite;
+        /* Tela de redirecionamento */
+        .redirect-screen {
+            display: none;
         }
 
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
+        .redirect-screen.active {
+            display: block;
         }
 
-        /* Efeito de clique sutil */
+        .redirect-screen .message {
+            margin-bottom: 20px;
+        }
+
+        .redirect-url {
+            color: var(--accent);
+            font-size: 10px;
+            word-break: break-all;
+        }
+
+        .loader-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--border);
+            margin-top: 24px;
+            overflow: hidden;
+        }
+
+        .loader-bar-fill {
+            height: 100%;
+            background: var(--accent);
+            animation: loading 1.5s ease-in-out forwards;
+        }
+
+        @keyframes loading {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
         .click-effect {
             position: fixed;
             width: 8px;
@@ -234,7 +255,6 @@
             }
         }
 
-        /* Responsivo */
         @media (max-width: 480px) {
             .info-row {
                 flex-direction: column;
@@ -255,62 +275,129 @@
 <body>
 
     <div class="container">
-        <!-- Ícone -->
-        <div class="icon">
-            <img src="https://raw.githubusercontent.com/JONATHANGABR/iwbtgr-br/main/Imagens/0.png" 
-                 alt="Ícone"
-                 onerror="this.parentElement.innerHTML='🍒'">
+        <!-- Tela 404 Normal -->
+        <div id="errorScreen">
+            <div class="icon">
+                <img src="https://raw.githubusercontent.com/JONATHANGABR/iwbtgr-br/main/Imagens/0.png" 
+                     alt="Ícone"
+                     onerror="this.parentElement.innerHTML='🍒'">
+            </div>
+
+            <div class="error-code">404</div>
+
+            <h1 class="title">PÁGINA NÃO ENCONTRADA</h1>
+
+            <p class="message">
+                O destino que você procura não existe ou foi movido.<br>
+                Verifique a URL ou retorne à página inicial.
+            </p>
+
+            <div class="info-card">
+                <div class="info-row">
+                    <span class="info-label">Status</span>
+                    <span class="info-value error">NOT FOUND</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">URL</span>
+                    <span class="info-value" id="currentPath">/</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Tentativas</span>
+                    <span class="info-value" id="attempts">1</span>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <a href="/" class="btn primary">Início</a>
+                <a href="javascript:history.back()" class="btn">Voltar</a>
+            </div>
+
+            <div class="footer">
+                <p><a href="/">IWBTGR PT-BR</a> — 2025</p>
+            </div>
         </div>
 
-        <!-- Código de Erro -->
-        <div class="error-code">ERRO 404</div>
+        <!-- Tela de Redirecionamento -->
+        <div id="redirectScreen" class="redirect-screen">
+            <div class="icon">⏳</div>
+            
+            <h1 class="title">REDIRECIONANDO</h1>
+            
+            <p class="message">
+                Esta página foi movida.<br>
+                Você será redirecionado automaticamente.
+            </p>
 
-        <!-- Título -->
-        <h1 class="title">PÁGINA NÃO ENCONTRADA</h1>
+            <p class="redirect-url" id="redirectUrl"></p>
 
-        <!-- Mensagem -->
-        <p class="message">
-            O destino que você procura não existe ou foi Removido.<br>
-            Verifique a URL ou retorne à página inicial.
-        </p>
-
-        <!-- Card de Info -->
-        <div class="info-card">
-            <div class="info-row">
-                <span class="info-label">Status</span>
-                <span class="info-value error">NOT FOUND</span>
+            <div class="loader-bar">
+                <div class="loader-bar-fill"></div>
             </div>
-            <div class="info-row">
-                <span class="info-label">Código</span>
-                <span class="info-value">HTTP 404</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">Tentativas</span>
-                <span class="info-value" id="attempts">1</span>
-            </div>
-        </div>
 
-        <!-- Botões -->
-        <div class="btn-group">
-            <a href="/" class="btn primary">Início</a>
-            <a href="javascript:history.back()" class="btn">Voltar</a>
-        </div>
-
-        <!-- Footer -->
-        <div class="footer">
-            <p><a href="/">IWBTGR PT-BR</a> — 2025</p>
+            <div class="footer" style="margin-top: 32px;">
+                <p>Não redirecionou? <a href="/" id="manualLink">Clique aqui</a></p>
+            </div>
         </div>
     </div>
 
     <script>
-        // Contador de tentativas
+        // ========================================
+        // CONFIGURAÇÃO DE REDIRECIONAMENTOS
+        // ========================================
+        // Adicione aqui as URLs que você quer redirecionar
+        // Formato: 'url-antiga': 'url-nova'
+        
+        const redirects = {
+            '/download': '/#downloads',
+            '/baixar': '/#downloads',
+            '/sobre': '/#about',
+            '/about': '/#about',
+            '/faq': '/#faq',
+            '/autor': '/#author',
+            '/author': '/#author',
+            '/contato': '/#author',
+            '/requisitos': '/#requirements',
+            '/requirements': '/#requirements',
+            // Adicione mais redirecionamentos aqui conforme necessário
+        };
+
+        // ========================================
+        // LÓGICA DE REDIRECIONAMENTO
+        // ========================================
+        
+        const currentPath = window.location.pathname.toLowerCase().replace(/\/$/, '') || '/';
+        document.getElementById('currentPath').textContent = currentPath;
+
+        // Verifica se existe redirecionamento para esta URL
+        if (redirects[currentPath]) {
+            const targetUrl = redirects[currentPath];
+            
+            // Mostra tela de redirecionamento
+            document.getElementById('errorScreen').style.display = 'none';
+            document.getElementById('redirectScreen').classList.add('active');
+            document.getElementById('redirectUrl').textContent = targetUrl;
+            document.getElementById('manualLink').href = targetUrl;
+            
+            // Redireciona após 1.5 segundos
+            setTimeout(() => {
+                window.location.replace(targetUrl);
+            }, 1500);
+        }
+
+        // ========================================
+        // CONTADOR DE TENTATIVAS
+        // ========================================
+        
         (function() {
             let attempts = parseInt(sessionStorage.getItem('404_attempts') || '0') + 1;
             sessionStorage.setItem('404_attempts', attempts);
             document.getElementById('attempts').textContent = attempts;
         })();
 
-        // Efeito de clique pixel
+        // ========================================
+        // EFEITO DE CLIQUE
+        // ========================================
+        
         document.addEventListener('click', function(e) {
             const effect = document.createElement('div');
             effect.className = 'click-effect';
@@ -322,7 +409,7 @@
 
         // Console
         console.log('%c404', 'font-size:48px;color:#ff6b6b;font-family:monospace');
-        console.log('Página não encontrada.');
+        console.log('Path:', currentPath);
     </script>
 
 </body>
