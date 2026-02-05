@@ -4,20 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>404 - Página não encontrada</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    
+    <script>
+        // ==========================================
+        // REDIRECIONAMENTOS - RODA ANTES DE TUDO
+        // ==========================================
+        
+        (function() {
+            var path = window.location.pathname.toLowerCase();
+            
+            // Remove barra final se tiver
+            if (path.endsWith('/')) {
+                path = path.slice(0, -1);
+            }
+            
+            // Se path estiver vazio, é a raiz
+            if (path === '') path = '/';
+            
+            // Lista de redirecionamentos
+            var redirects = {
+                '/download': '/#downloads',
+                '/baixar': '/#downloads',
+                '/sobre': '/#about',
+                '/about': '/#about',
+                '/faq': '/#faq',
+                '/autor': '/#author',
+                '/contato': '/#author'
+            };
+            
+            // Se a URL está na lista, redireciona imediatamente
+            if (redirects[path]) {
+                window.location.replace(redirects[path]);
+            }
+        })();
+    </script>
+    
     <style>
-        :root {
-            --bg-dark: #0c0c1d;
-            --bg-card: #12122a;
-            --accent: #ff6b6b;
-            --accent-dim: #cc5555;
-            --text: #ffffff;
-            --text-muted: #6b7280;
-            --border: #2a2a4a;
-        }
-
         * {
             margin: 0;
             padding: 0;
@@ -26,16 +49,16 @@
 
         body {
             font-family: 'Press Start 2P', monospace;
-            background-color: var(--bg-dark);
-            color: var(--text);
+            background: #0c0c1d;
+            color: #fff;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
-            cursor: crosshair;
         }
 
+        /* Grid de fundo */
         body::before {
             content: '';
             position: fixed;
@@ -48,80 +71,52 @@
                 linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
             background-size: 32px 32px;
             pointer-events: none;
-            z-index: 0;
         }
 
         .container {
-            max-width: 540px;
-            width: 100%;
+            max-width: 500px;
             text-align: center;
             z-index: 1;
         }
 
-        .error-code {
-            font-size: clamp(48px, 12vw, 80px);
-            color: var(--accent);
-            letter-spacing: 8px;
-            margin-bottom: 32px;
-            position: relative;
-            display: inline-block;
-        }
-
-        .error-code::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60%;
-            height: 4px;
-            background: var(--accent);
-        }
-
         .icon {
-            width: 48px;
-            height: 48px;
-            margin: 0 auto 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            opacity: 0.9;
+            font-size: 48px;
+            margin-bottom: 24px;
         }
 
-        .icon img {
-            width: 100%;
-            height: 100%;
-            image-rendering: pixelated;
+        .error-code {
+            font-size: 64px;
+            color: #ff6b6b;
+            letter-spacing: 8px;
+            margin-bottom: 24px;
         }
 
         .title {
-            font-size: clamp(12px, 3vw, 16px);
+            font-size: 14px;
             margin-bottom: 16px;
             letter-spacing: 2px;
         }
 
         .message {
-            font-size: clamp(8px, 2vw, 10px);
-            color: var(--text-muted);
+            font-size: 10px;
+            color: #6b7280;
             line-height: 2;
-            margin-bottom: 40px;
+            margin-bottom: 32px;
         }
 
-        .info-card {
-            background: var(--bg-card);
-            border: 2px solid var(--border);
-            padding: 24px;
+        .info-box {
+            background: #12122a;
+            border: 2px solid #2a2a4a;
+            padding: 20px;
             margin-bottom: 32px;
+            font-size: 8px;
         }
 
         .info-row {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid var(--border);
-            font-size: 8px;
+            padding: 8px 0;
+            border-bottom: 1px solid #2a2a4a;
         }
 
         .info-row:last-child {
@@ -129,20 +124,17 @@
         }
 
         .info-label {
-            color: var(--text-muted);
-            text-transform: uppercase;
+            color: #6b7280;
         }
 
         .info-value {
-            color: var(--text);
+            color: #ff6b6b;
             word-break: break-all;
+            text-align: right;
+            max-width: 60%;
         }
 
-        .info-value.error {
-            color: var(--accent);
-        }
-
-        .btn-group {
+        .buttons {
             display: flex;
             gap: 12px;
             justify-content: center;
@@ -153,121 +145,63 @@
             font-family: 'Press Start 2P', monospace;
             font-size: 8px;
             padding: 16px 24px;
-            border: 2px solid var(--border);
-            background: var(--bg-card);
-            color: var(--text);
+            border: 2px solid #2a2a4a;
+            background: #12122a;
+            color: #fff;
             text-decoration: none;
             cursor: pointer;
-            transition: all 0.2s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            transition: all 0.2s;
         }
 
         .btn:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-            transform: translateY(-2px);
+            border-color: #ff6b6b;
+            color: #ff6b6b;
         }
 
-        .btn.primary {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: var(--bg-dark);
+        .btn-primary {
+            background: #ff6b6b;
+            border-color: #ff6b6b;
+            color: #0c0c1d;
         }
 
-        .btn.primary:hover {
-            background: var(--accent-dim);
-            border-color: var(--accent-dim);
-            color: var(--bg-dark);
+        .btn-primary:hover {
+            background: #ff8a8a;
+            border-color: #ff8a8a;
+            color: #0c0c1d;
         }
 
         .footer {
-            margin-top: 48px;
+            margin-top: 40px;
             font-size: 8px;
-            color: var(--text-muted);
+            color: #6b7280;
         }
 
         .footer a {
-            color: var(--accent);
+            color: #ff6b6b;
             text-decoration: none;
         }
 
-        .footer a:hover {
-            text-decoration: underline;
-        }
-
-        /* Tela de redirecionamento */
-        .redirect-screen {
-            display: none;
-        }
-
-        .redirect-screen.active {
-            display: block;
-        }
-
-        .redirect-screen .message {
-            margin-bottom: 20px;
-        }
-
-        .redirect-url {
-            color: var(--accent);
-            font-size: 10px;
-            word-break: break-all;
-        }
-
-        .loader-bar {
-            width: 100%;
-            height: 4px;
-            background: var(--border);
-            margin-top: 24px;
-            overflow: hidden;
-        }
-
-        .loader-bar-fill {
-            height: 100%;
-            background: var(--accent);
-            animation: loading 1.5s ease-in-out forwards;
-        }
-
-        @keyframes loading {
-            0% { width: 0%; }
-            100% { width: 100%; }
-        }
-
-        .click-effect {
-            position: fixed;
-            width: 8px;
-            height: 8px;
-            background: var(--accent);
-            pointer-events: none;
-            z-index: 999;
-            animation: clickPulse 0.3s ease-out forwards;
-        }
-
-        @keyframes clickPulse {
-            0% { 
-                transform: translate(-50%, -50%) scale(1);
-                opacity: 1;
-            }
-            100% { 
-                transform: translate(-50%, -50%) scale(3);
-                opacity: 0;
-            }
-        }
-
         @media (max-width: 480px) {
+            .error-code {
+                font-size: 48px;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
             .info-row {
                 flex-direction: column;
                 gap: 4px;
-                text-align: center;
             }
-
-            .btn-group {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
+            
+            .info-value {
+                text-align: left;
+                max-width: 100%;
             }
         }
     </style>
@@ -275,141 +209,41 @@
 <body>
 
     <div class="container">
-        <!-- Tela 404 Normal -->
-        <div id="errorScreen">
-            <div class="icon">
-                <img src="https://raw.githubusercontent.com/JONATHANGABR/iwbtgr-br/main/Imagens/0.png" 
-                     alt="Ícone"
-                     onerror="this.parentElement.innerHTML='🍒'">
+        <div class="icon">🍒</div>
+        
+        <div class="error-code">404</div>
+        
+        <h1 class="title">PÁGINA NÃO ENCONTRADA</h1>
+        
+        <p class="message">
+            A página que você procura não existe<br>
+            ou foi movida para outro lugar.
+        </p>
+
+        <div class="info-box">
+            <div class="info-row">
+                <span class="info-label">STATUS</span>
+                <span class="info-value">NOT FOUND</span>
             </div>
-
-            <div class="error-code">404</div>
-
-            <h1 class="title">PÁGINA NÃO ENCONTRADA</h1>
-
-            <p class="message">
-                O destino que você procura não existe ou foi movido.<br>
-                Verifique a URL ou retorne à página inicial.
-            </p>
-
-            <div class="info-card">
-                <div class="info-row">
-                    <span class="info-label">Status</span>
-                    <span class="info-value error">NOT FOUND</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">URL</span>
-                    <span class="info-value" id="currentPath">/</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Tentativas</span>
-                    <span class="info-value" id="attempts">1</span>
-                </div>
-            </div>
-
-            <div class="btn-group">
-                <a href="/" class="btn primary">Início</a>
-                <a href="javascript:history.back()" class="btn">Voltar</a>
-            </div>
-
-            <div class="footer">
-                <p><a href="/">IWBTGR PT-BR</a> — 2025</p>
+            <div class="info-row">
+                <span class="info-label">URL</span>
+                <span class="info-value" id="urlDisplay">/</span>
             </div>
         </div>
 
-        <!-- Tela de Redirecionamento -->
-        <div id="redirectScreen" class="redirect-screen">
-            <div class="icon">⏳</div>
-            
-            <h1 class="title">REDIRECIONANDO</h1>
-            
-            <p class="message">
-                Esta página foi movida.<br>
-                Você será redirecionado automaticamente.
-            </p>
+        <div class="buttons">
+            <a href="/" class="btn btn-primary">INÍCIO</a>
+            <a href="javascript:history.back()" class="btn">VOLTAR</a>
+        </div>
 
-            <p class="redirect-url" id="redirectUrl"></p>
-
-            <div class="loader-bar">
-                <div class="loader-bar-fill"></div>
-            </div>
-
-            <div class="footer" style="margin-top: 32px;">
-                <p>Não redirecionou? <a href="/" id="manualLink">Clique aqui</a></p>
-            </div>
+        <div class="footer">
+            <a href="/">IWBTGR PT-BR</a> — 2025
         </div>
     </div>
 
     <script>
-        // ========================================
-        // CONFIGURAÇÃO DE REDIRECIONAMENTOS
-        // ========================================
-        // Adicione aqui as URLs que você quer redirecionar
-        // Formato: 'url-antiga': 'url-nova'
-        
-        const redirects = {
-            '/download': '/#downloads',
-            '/baixar': '/#downloads',
-            '/sobre': '/#about',
-            '/about': '/#about',
-            '/faq': '/#faq',
-            '/autor': '/#author',
-            '/author': '/#author',
-            '/contato': '/#author',
-            '/requisitos': '/#requirements',
-            '/requirements': '/#requirements',
-            // Adicione mais redirecionamentos aqui conforme necessário
-        };
-
-        // ========================================
-        // LÓGICA DE REDIRECIONAMENTO
-        // ========================================
-        
-        const currentPath = window.location.pathname.toLowerCase().replace(/\/$/, '') || '/';
-        document.getElementById('currentPath').textContent = currentPath;
-
-        // Verifica se existe redirecionamento para esta URL
-        if (redirects[currentPath]) {
-            const targetUrl = redirects[currentPath];
-            
-            // Mostra tela de redirecionamento
-            document.getElementById('errorScreen').style.display = 'none';
-            document.getElementById('redirectScreen').classList.add('active');
-            document.getElementById('redirectUrl').textContent = targetUrl;
-            document.getElementById('manualLink').href = targetUrl;
-            
-            // Redireciona após 1.5 segundos
-            setTimeout(() => {
-                window.location.replace(targetUrl);
-            }, 1500);
-        }
-
-        // ========================================
-        // CONTADOR DE TENTATIVAS
-        // ========================================
-        
-        (function() {
-            let attempts = parseInt(sessionStorage.getItem('404_attempts') || '0') + 1;
-            sessionStorage.setItem('404_attempts', attempts);
-            document.getElementById('attempts').textContent = attempts;
-        })();
-
-        // ========================================
-        // EFEITO DE CLIQUE
-        // ========================================
-        
-        document.addEventListener('click', function(e) {
-            const effect = document.createElement('div');
-            effect.className = 'click-effect';
-            effect.style.left = e.clientX + 'px';
-            effect.style.top = e.clientY + 'px';
-            document.body.appendChild(effect);
-            setTimeout(() => effect.remove(), 300);
-        });
-
-        // Console
-        console.log('%c404', 'font-size:48px;color:#ff6b6b;font-family:monospace');
-        console.log('Path:', currentPath);
+        // Mostra a URL atual na tela
+        document.getElementById('urlDisplay').textContent = window.location.pathname;
     </script>
 
 </body>
