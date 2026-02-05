@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Página não encontrada</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0c0c1d;
+            --bg-card: #12122a;
+            --accent: #ff6b6b;
+            --accent-dim: #cc5555;
+            --text: #ffffff;
+            --text-muted: #6b7280;
+            --border: #2a2a4a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Press Start 2P', monospace;
+            background-color: var(--bg-dark);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            cursor: crosshair;
+        }
+
+        /* Grid de fundo sutil */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 32px 32px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 540px;
+            width: 100%;
+            text-align: center;
+            z-index: 1;
+        }
+
+        /* Código 404 */
+        .error-code {
+            font-size: clamp(48px, 12vw, 80px);
+            color: var(--accent);
+            letter-spacing: 8px;
+            margin-bottom: 32px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .error-code::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 4px;
+            background: var(--accent);
+        }
+
+        /* Ícone Pixel */
+        .icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            opacity: 0.9;
+        }
+
+        .icon img {
+            width: 100%;
+            height: 100%;
+            image-rendering: pixelated;
+        }
+
+        /* Textos */
+        .title {
+            font-size: clamp(12px, 3vw, 16px);
+            margin-bottom: 16px;
+            letter-spacing: 2px;
+        }
+
+        .message {
+            font-size: clamp(8px, 2vw, 10px);
+            color: var(--text-muted);
+            line-height: 2;
+            margin-bottom: 40px;
+        }
+
+        /* Card de Informação */
+        .info-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 8px;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .info-value {
+            color: var(--text);
+        }
+
+        .info-value.error {
+            color: var(--accent);
+        }
+
+        /* Botões */
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 8px;
+            padding: 16px 24px;
+            border: 2px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .btn.primary {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--bg-dark);
+        }
+
+        .btn.primary:hover {
+            background: var(--accent-dim);
+            border-color: var(--accent-dim);
+            color: var(--bg-dark);
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 48px;
+            font-size: 8px;
+            color: var(--text-muted);
+        }
+
+        .footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Cursor blink */
+        .blink {
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Efeito de clique sutil */
+        .click-effect {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            pointer-events: none;
+            z-index: 999;
+            animation: clickPulse 0.3s ease-out forwards;
+        }
+
+        @keyframes clickPulse {
+            0% { 
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+            100% { 
+                transform: translate(-50%, -50%) scale(3);
+                opacity: 0;
+            }
+        }
+
+        /* Responsivo */
+        @media (max-width: 480px) {
+            .info-row {
+                flex-direction: column;
+                gap: 4px;
+                text-align: center;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Ícone -->
+        <div class="icon">
+            <img src="https://raw.githubusercontent.com/JONATHANGABR/iwbtgr-br/main/Imagens/0.png" 
+                 alt="Ícone"
+                 onerror="this.parentElement.innerHTML='🍒'">
+        </div>
+
+        <!-- Código de Erro -->
+        <div class="error-code">ERRO 404</div>
+
+        <!-- Título -->
+        <h1 class="title">PÁGINA NÃO ENCONTRADA</h1>
+
+        <!-- Mensagem -->
+        <p class="message">
+            O destino que você procura não existe ou foi Removido.<br>
+            Verifique a URL ou retorne à página inicial.
+        </p>
+
+        <!-- Card de Info -->
+        <div class="info-card">
+            <div class="info-row">
+                <span class="info-label">Status</span>
+                <span class="info-value error">NOT FOUND</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Código</span>
+                <span class="info-value">HTTP 404</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Tentativas</span>
+                <span class="info-value" id="attempts">1</span>
+            </div>
+        </div>
+
+        <!-- Botões -->
+        <div class="btn-group">
+            <a href="/" class="btn primary">Início</a>
+            <a href="javascript:history.back()" class="btn">Voltar</a>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p><a href="/">IWBTGR PT-BR</a> — 2025</p>
+        </div>
+    </div>
+
+    <script>
+        // Contador de tentativas
+        (function() {
+            let attempts = parseInt(sessionStorage.getItem('404_attempts') || '0') + 1;
+            sessionStorage.setItem('404_attempts', attempts);
+            document.getElementById('attempts').textContent = attempts;
+        })();
+
+        // Efeito de clique pixel
+        document.addEventListener('click', function(e) {
+            const effect = document.createElement('div');
+            effect.className = 'click-effect';
+            effect.style.left = e.clientX + 'px';
+            effect.style.top = e.clientY + 'px';
+            document.body.appendChild(effect);
+            setTimeout(() => effect.remove(), 300);
+        });
+
+        // Console
+        console.log('%c404', 'font-size:48px;color:#ff6b6b;font-family:monospace');
+        console.log('Página não encontrada.');
+    </script>
+
+</body>
+</html>
